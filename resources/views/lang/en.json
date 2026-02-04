@@ -1,0 +1,22 @@
+{
+    "Dashboard": "Dashboard",
+    "Employees": "Employees",
+    "Add Employee": "Add Employee",
+    "Employee List": "Employee List",
+    "Import Employees": "Import Employees",
+    "Export Employees": "Export Employees",
+    "CDD Contracts": "CDD Contracts",
+    "CDI Contracts": "CDI Contracts",
+
+    "Invoices": "Invoices",
+    "All Customers": "All Customers",
+    "All Statements": "All Statements",
+    "Create Customer": "Create Customer",
+    "Create Invoice": "Create Invoice",
+
+    "Configuration": "Configuration",
+    "All Users": "All Users",
+    "Create User": "Create User",
+    "All Roles": "All Roles",
+    "Create Role": "Create Role"
+}

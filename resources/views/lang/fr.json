@@ -1,0 +1,22 @@
+{
+    "Dashboard": "Tableau de bord",
+    "Employees": "Employés",
+    "Add Employee": "Ajouter Employé",
+    "Employee List": "Liste Employés",
+    "Import Employees": "Importer Employés",
+    "Export Employees": "Exporter Employés",
+    "CDD Contracts": "Contrats CDD",
+    "CDI Contracts": "Contrats CDI",
+
+    "Invoices": "Factures",
+    "All Customers": "Tous les Clients",
+    "All Statements": "Tous les États",
+    "Create Customer": "Créer Client",
+    "Create Invoice": "Créer Facture",
+
+    "Configuration": "Configuration",
+    "All Users": "Tous les Utilisateurs",
+    "Create User": "Créer Utilisateur",
+    "All Roles": "Tous les Rôles",
+    "Create Role": "Créer Rôle"
+}
