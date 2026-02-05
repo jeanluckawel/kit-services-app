@@ -86,7 +86,7 @@
                 @can('employee_cdi')
                     <li class="nav-item">
                         <a href="{{ route('employee.file') }}" class="nav-link">
-                            <i class="nav-icon bi bi-file-earmark-check text-success"></i>
+                            <i class="nav-icon bi bi-file-fill text-success"></i>
                             <p>File</p>
                         </a>
                     </li>
@@ -94,7 +94,6 @@
             @endcanany
 
 
-            {{-- ================= INVOICES ================= --}}
             @canany(['customer_list','invoice_statement','customer_create'])
                 <li class="nav-header">Invoices</li>
 

@@ -16,7 +16,7 @@
                     <a href="{{ asset('files/kit services employee.xlsx') }}" download class="text-decoration-none">
                         <div class="info-box">
                         <span class="info-box-icon text-bg-warning shadow-sm">
-                            <i class="bi bi-people-fill"></i>
+                            <i class="bi bi-file-fill"></i>
                         </span>
                             <div class="info-box-content">
                                 <span class="info-box-text">File</span>
