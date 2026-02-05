@@ -354,7 +354,7 @@ class EmployeeController extends Controller
 
         $employee->load('address', 'company', 'salaries', 'emergencies', 'children', 'dependants');
 
-        return view('employee.view', compact('employee'));
+        return view('Employee.view', compact('employee'));
     }
 
 

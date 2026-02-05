@@ -146,23 +146,45 @@
                 <!--begin::User Menu Dropdown-->
                 @auth
 
+
+                    @php
+                        $name = Auth::user()->name;
+
+                        $initials = collect(explode(' ', $name))
+                            ->filter()
+                            ->map(fn ($word) => strtoupper(substr($word, 0, 1)))
+                            ->take(2)
+                            ->implode('');
+                        $colors = ['#dc3545', '#0d6efd', '#198754', '#6f42c1', '#fd7e14'];
+                        $bgColor = $colors[crc32($name) % count($colors)];
+                    @endphp
+
+
+
+
                     <li class="nav-item dropdown user-menu">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img
-                                src="../assets/img/user2-160x160.jpg"
-                                class="user-image rounded-circle shadow"
-                                alt="User Image"
-                            />
+                         <span class="d-none d-md-inline d-lg-inline"
+                               style="
+                                    background: {{ $bgColor }};
+                                    color: white;
+                                    border-radius: 100%;
+                                    padding: 0.2rem 0.5rem;
+                                    margin-right: 5px;
+                                    font-weight: 600;
+                                  ">
+                                {{ $initials }}
+                            </span>
+
                             <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <!--begin::User Image-->
                             <li class="user-header text-bg-primary">
-                                <img
-                                    src="../assets/img/user2-160x160.jpg"
-                                    class="rounded-circle shadow"
-                                    alt="User Image"
-                                />
+                                <div class="user-image rounded-circle shadow d-flex align-items-center justify-content-center bg-warning text-white fw-bold"
+                                     style="width:40px; height:40px; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                    {{ $initials }}
+                                </div>
                                 <p>
                                     {{ Auth::user()->name }}
                                     <small>{{ Auth::user()->email }}</small>
