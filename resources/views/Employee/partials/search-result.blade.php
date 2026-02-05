@@ -70,14 +70,14 @@
                         @can('employee_view')
                             <a href="{{ route('employee.view', $employee->id) }}"
                                class="btn btn-sm btn-outline-primary">
-                                View
+                                Voir
                             </a>
                         @endcan
 
                         @can('employee_edit')
                             <a href="{{ route('employee.edit', $employee->id) }}"
                                class="btn btn-sm btn-outline-warning">
-                                Edit
+                                Modifier
                             </a>
                         @endcan
 
@@ -86,13 +86,12 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#disableEmployeeModal"
                                     data-employee-id="{{ $employee->id }}">
-                                Delete
+                                Supprimer
                             </button>
                         @endcan
 
                     </div>
                 </td>
-
 
 
             </tr>
