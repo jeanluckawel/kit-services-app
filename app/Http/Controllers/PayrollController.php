@@ -379,7 +379,7 @@ class PayrollController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('payroll.history', compact('payrolls'));
+        return view('Payroll.history', compact('payrolls'));
     }
 
 
