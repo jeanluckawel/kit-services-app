@@ -369,9 +369,9 @@ class EmployeeController extends Controller
 
         $departments = Department::all();
         $sections = Section::all();
-        $jobTitles = JobTitle::all();      
+        $jobTitles = JobTitle::all();
 
-        return view('employee.edit', compact('employee', 'departments', 'sections', 'jobTitles'));
+        return view('Employee.edit', compact('employee', 'departments', 'sections', 'jobTitles'));
     }
 
 
