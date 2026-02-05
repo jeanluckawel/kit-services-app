@@ -12,7 +12,7 @@ class EmployeeExport extends Controller
     public function show()
     {
 
-        return view('employee.export');
+        return view('Employee.export');
 
     }
 
