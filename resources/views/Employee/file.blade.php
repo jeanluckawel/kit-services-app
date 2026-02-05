@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="app-content">
-        <div class="container-fluid">
+        <div class="container-fluid mt-3">
 
 
             <div class="row g-3">
