@@ -67,34 +67,32 @@
                 <td class="text-center">
                     <div class="d-inline-flex gap-1">
 
-
                         @can('employee_view')
                             <a href="{{ route('employee.view', $employee->id) }}"
                                class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-eye"></i>
+                                Voir
                             </a>
                         @endcan
-
 
                         @can('employee_edit')
                             <a href="{{ route('employee.edit', $employee->id) }}"
                                class="btn btn-sm btn-outline-warning">
-                                <i class="bi bi-pencil-square"></i>
+                                Modifier
                             </a>
                         @endcan
-
 
                         @can('employee_disable')
                             <button class="btn btn-sm btn-outline-danger"
                                     data-bs-toggle="modal"
                                     data-bs-target="#disableEmployeeModal"
                                     data-employee-id="{{ $employee->id }}">
-                                <i class="bi bi-trash"></i>
+                                Supprimer
                             </button>
                         @endcan
 
                     </div>
                 </td>
+
 
             </tr>
         @endforeach
