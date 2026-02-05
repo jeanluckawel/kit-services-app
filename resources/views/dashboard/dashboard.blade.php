@@ -5,12 +5,21 @@
 @section('content')
 
     <div class="app-content-header">
-
         <div class="container-fluid">
-            <div class="col-sm-6"><h3 class="mb-0">Dashboard </h3></div>
-        </div>
 
+            <div class="col-sm-6">
+                <h3 class="mb-0">Dashboard</h3>
+            </div>
+
+            <div class="col-sm-6">
+                <h3 class="mb-0">
+                    Hi, Welcome {{ auth()->user()->name }}
+                </h3>
+            </div>
+
+        </div>
     </div>
+
 
 
 {{--    <div class="app-content">--}}
@@ -90,7 +99,7 @@
     <div class="app-content">
         <div class="container-fluid">
 
-            <!-- ================= INFO BOXES ================= -->
+
             <div class="row g-3">
 
                 <!-- Employees -->
@@ -101,7 +110,7 @@
                     </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Employees</span>
-                            <span class="info-box-number">150</span>
+                            <span class="info-box-number">{{ $employeeCount ?? '0' }}</span>
                         </div>
                     </div>
                 </div>
@@ -123,11 +132,11 @@
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box">
                     <span class="info-box-icon text-bg-danger shadow-sm">
-                        <i class="bi bi-file-earmark-text-fill"></i>
+                       <i class="bi bi-wallet2"></i>
                     </span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Active Contracts</span>
-                            <span class="info-box-number">80</span>
+                            <span class="info-box-text">Balance CDF</span>
+                            <span class="info-box-number">{{ $balanceCDF ?? '0' }}</span>
                         </div>
                     </div>
                 </div>
@@ -136,11 +145,11 @@
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box">
                     <span class="info-box-icon text-bg-success shadow-sm">
-                        <i class="bi bi-cash-stack"></i>
+                         <i class="bi bi-currency-dollar"></i>
                     </span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Payrolls</span>
-                            <span class="info-box-number">140</span>
+                            <span class="info-box-text">Balance USD</span>
+                            <span class="info-box-number">{{ $balanceUSD ?? '0' }}</span>
                         </div>
                     </div>
                 </div>
@@ -169,7 +178,7 @@
             </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Payrolls</span>
-                            <span class="info-box-number">92,050</span>
+                            <span class="info-box-number">{{ $balanceUSD ?? '0' }}</span>
                         </div>
                     </div>
 
@@ -189,7 +198,7 @@
             </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Users</span>
-                            <span class="info-box-number">92,050</span>
+                            <span class="info-box-number">{{ $user ?? '0' }}</span>
                         </div>
                     </div>
                 </div>
