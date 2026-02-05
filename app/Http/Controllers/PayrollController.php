@@ -387,7 +387,7 @@ class PayrollController extends Controller
     {
         $employees = Employee::all();
 
-        return view('payroll.export', compact('employees'));
+        return view('Payroll.export', compact('employees'));
     }
 
 
