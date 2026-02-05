@@ -82,6 +82,8 @@ Route::middleware(['auth','verified'])->group(function () {
 
     Route::get('/employees/{id}/certificat', [EmployeeController::class, 'certificat'])
         ->name('employee.certificat')->middleware('can:employee_certificate');
+    Route::get('/employees/file', [EmployeeController::class, 'file'])
+        ->name('employee.file')/*->middleware('can:employee_certificate')*/;
 });
 
 // Customers

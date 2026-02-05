@@ -82,6 +82,15 @@
                         </a>
                     </li>
                 @endcan
+
+                @can('employee_cdi')
+                    <li class="nav-item">
+                        <a href="{{ route('employee.file') }}" class="nav-link">
+                            <i class="nav-icon bi bi-file-earmark-check text-success"></i>
+                            <p>File</p>
+                        </a>
+                    </li>
+                @endcan
             @endcanany
 
 

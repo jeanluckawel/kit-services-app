@@ -874,5 +874,10 @@ class EmployeeController extends Controller
         return response()->json($jobTitles);
     }
 
+    public function file()
+    {
+        return view('Employee.file');
+    }
+
 
 }
