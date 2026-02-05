@@ -12,7 +12,7 @@ class EmployeeImportController extends Controller
 
     public function show()
     {
-        return view('employee.import');
+        return view('Employee.import');
     }
 
     public function store(Request $request)
