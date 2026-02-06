@@ -33,6 +33,12 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             });
         }
 
+
+        if (request()->has('status') && request('status') !== '') {
+            $query->where('status', request('status'));
+        }
+
+
         return $query->get();
     }
 
@@ -73,6 +79,9 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             'Category',
             'Echelon',
             'Currency',
+
+//            status
+            'status'
         ];
     }
 
@@ -117,6 +126,8 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $salary->category ?? '',
             $salary->echelon ?? '',
             $salary->currency ?? '',
+
+            $employee->status ?? '',
         ];
     }
 

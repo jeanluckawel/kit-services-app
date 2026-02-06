@@ -70,16 +70,23 @@
 
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <img
-                                        src="{{ asset('storage/', $employee->photo) }}"
-                                        alt="Employee Photo"
-                                        class="rounded-circle"
-                                        width="45"
-                                        height="45"
-                                    >
+                                    @php
+                                        $initials = strtoupper(substr($employee->first_name,0,1) . substr($employee->last_name,0,1));
+                                        $bgColor = '#ff7f00';
+                                    @endphp
+
+                                    @if($employee->photo)
+                                        <img src="{{ asset('storage/'.$employee->photo) }}" alt="Photo" class="rounded-circle" width="45" height="45">
+                                    @else
+                                        <div class="rounded-circle d-flex justify-content-center align-items-center"
+                                             style="width:45px; height:45px; background-color: {{ $bgColor }}; color:white; font-weight:bold; font-size:16px;">
+                                            {{ $initials }}
+                                        </div>
+                                    @endif
+
                                     <div>
                                         <strong>{{ $employee->first_name }}</strong><br>
-                                        <small class="text-muted">{{ $employee->employee_id }}</small>
+                                        <small>{{ $employee->employee_id }}</small>
                                     </div>
                                 </div>
                             </td>
@@ -99,20 +106,17 @@
                             <td class="text-center">
                                 <div class="d-inline-flex gap-1">
 
-
                                     <a href="{{ route('employee.view', $employee->id) }}"
                                        class="btn btn-sm btn-outline-primary"
                                        title="View">
-                                        <i class="bi bi-eye"></i>
+                                        View
                                     </a>
-
 
                                     <a href="{{ route('employee.edit', $employee->id) }}"
                                        class="btn btn-sm btn-outline-warning"
                                        title="Edit">
-                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
                                     </a>
-
 
                                     <button
                                         class="btn btn-sm btn-outline-danger"
@@ -121,11 +125,12 @@
                                         data-bs-target="#disableEmployeeModal"
                                         data-employee-id="{{ $employee->id }}"
                                     >
-                                        <i class="bi bi-trash"></i>
+                                        Disable
                                     </button>
 
                                 </div>
                             </td>
+
 
                         </tr>
                     @endforeach

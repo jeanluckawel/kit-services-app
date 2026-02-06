@@ -52,6 +52,15 @@
                         </select>
                     </div>
 
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All</option>
+                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Actif</option>
+                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Inactif</option>
+                        </select>
+                    </div>
+
 
                 </div>
 

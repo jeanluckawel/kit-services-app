@@ -35,13 +35,29 @@
             </div>
 
             @php
-                if($employee->gender === 'Male'){
+                if($employee->gender === 'M'){
                    $title = 'Monsieur';
-                } elseif($employee->gender === 'Female'){
+                } elseif($employee->gender === 'F'){
                    $title = 'Madame';
                 } else {
                    $title = 'Monsieur/Madame';
                 }
+
+                use Carbon\Carbon;
+
+                $hireDate = $employee->company->hire_date
+                            ? Carbon::parse($employee->company->hire_date)->locale('fr')->translatedFormat('d F Y')
+                            : 'JJ-MM-AAAA';
+
+                $endDate = $employee->company->end_contract_date
+                            ? Carbon::parse($employee->company->end_contract_date)->locale('fr')->translatedFormat('d F Y')
+                            : 'JJ-MM-AAAA';
+
+                $jobTitle = $employee->company->job_title ?? 'Poste';
+                $firstLetter = mb_strtoupper(mb_substr($jobTitle, 0, 1, 'UTF-8'));
+
+
+                $preposition = in_array($firstLetter, ['A','E','I','O','U','Y']) ? "d’" : "de ";
             @endphp
 
                 <!-- Corps du certificat -->
@@ -51,9 +67,9 @@
                     titulaire du numéro matricule <strong>{{ $employee->employee_id ?? 'XXXX' }}</strong>.
                 </p>
                 <p class="text-lg">
-                    A été employé(e) au sein de notre entreprise du <strong>{{ $employee->created_at ?? 'JJ-MM-AAAA' }}</strong>
-                    au <strong>{{ $employee->end_contract_date ?? 'JJ-MM-AAAA' }}</strong>, en qualité de
-                    <strong>{{ $employee->function ?? 'Poste' }}</strong>.
+                    {{ $employee->gender === 'F' ? 'A été employée' : 'A été employé' }}
+                    au sein de notre entreprise du <strong>{{ $hireDate ?? 'JJ-MM-AAAA' }}</strong>
+                    au <strong>{{ $endDate?? 'JJ-MM-AAAA' }}</strong>, en qualité {{ $preposition }}<strong>{{ $jobTitle }}</strong>
                 </p>
                 <p class="text-lg">
                     Pendant toute la durée de son contrat, {{$title}} <strong>{{ $employee->first_name ?? 'Nom' }}</strong>
@@ -74,7 +90,7 @@
                     <!-- Human Resources -->
                     <div class="text-center">
                         <p class="font-bold text-gray-700 uppercase">HUMAN RESOURCES</p>
-                        <p class="text-gray-600">BANZA GLORY</p>
+                        <p class="text-gray-600"></p>
                     </div>
 
                     <!-- Logo + Timbre -->

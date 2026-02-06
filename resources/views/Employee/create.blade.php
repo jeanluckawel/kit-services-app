@@ -602,29 +602,72 @@
 
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">{{ __('Category') }}</label>
-                                <select name="salary_category" class="form-select" style="border-radius:0; color:#ff6600;">
+                                <select id="categorySelect" name="salary_category" class="form-select" style="border-radius:0; color:#ff6600;">
                                     <option value="">{{ __('Select Category') }}</option>
                                     <option value="A1">A1</option>
                                     <option value="A2">A2</option>
                                     <option value="A3">A3</option>
-                                    <option value="B1">B1</option>
-                                    <option value="B2">B2</option>
                                     <option value="C1">C1</option>
                                     <option value="C2">C2</option>
+                                    <option value="C3">C3</option>
+                                    <option value="C4">C4</option>
+                                    <option value="C5">C5</option>
+                                    <option value="D1">D1</option>
+                                    <option value="D2">D2</option>
+                                    <option value="D3">D3</option>
+                                    <option value="D4">D4</option>
+                                    <option value="D5">D5</option>
+                                    <option value="E1">E1</option>
+                                    <option value="E2">E2</option>
+                                    <option value="E3">E3</option>
                                 </select>
                             </div>
 
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">{{ __('Echelon') }}</label>
-                                <select name="salary_echelon" class="form-select" style="border-radius:0; color:#ff6600;">
-                                    <option value="">{{ __('Select Echelon') }}</option>
-                                    <option value="I">I</option>
-                                    <option value="II">II</option>
-                                    <option value="III">III</option>
-                                    <option value="IV">IV</option>
-                                    <option value="V">V</option>
-                                </select>
+                                <input type="text" id="echelonSelect" name="salary_echelon" class="form-control" style="border-radius:0; color:#ff6600;" readonly>
                             </div>
+
+                            <script>
+                                const categorySelect = document.getElementById('categorySelect');
+                                const echelonInput = document.getElementById('echelonSelect');
+
+
+                                const categoryToEchelon = {
+                                    'A1': 'I',
+                                    'A2': 'II',
+                                    'A3': 'III',
+                                    'B1': 'IV',
+                                    'B2': 'V',
+                                    'B3': 'VI',
+                                    'B4': 'VII',
+                                    'B5': 'VIII',
+                                    'C1': 'IX',
+                                    'C2': 'X',
+                                    'C3': 'XI',
+                                    'C4': 'XII',
+                                    'C5': 'XIII',
+                                    'D1': 'XIV',
+                                    'D2': 'XV',
+                                    'D3': 'XVI',
+                                    'D4': 'XVII',
+                                    'D5': 'XVIII',
+                                    'E1': 'XIX',
+                                    'E2': 'XX',
+                                    'E3': 'XXI'
+                                };
+
+
+                                categorySelect.addEventListener('change', function() {
+                                    const catValue = this.value;
+                                    echelonInput.value = categoryToEchelon[catValue] || '';
+                                });
+
+
+                                categorySelect.dispatchEvent(new Event('change'));
+                            </script>
+
+
 
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">{{ __('Currency') }}</label>
@@ -654,13 +697,13 @@
 
                 </div>
 
-
                 <div class="mt-4 text-end">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" id="saveBtn" class="btn btn-primary">
+                        <span id="btnText">Save</span>
+                        <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                    </button>
                     <button type="reset" class="btn btn-secondary">Cancel</button>
                 </div>
-
-
             </form>
         </div>
     </div>
@@ -999,6 +1042,24 @@
                 }
             });
 
+        });
+
+
+
+        const form = document.querySelector('form'); // cible ton formulaire
+        const saveBtn = document.getElementById('saveBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        form.addEventListener('submit', function(e) {
+            // Empêche le double clic
+            saveBtn.disabled = true;
+
+            // Affiche le spinner
+            btnSpinner.classList.remove('d-none');
+
+            // Optionnel : change le texte du bouton
+            btnText.textContent = 'Saving...';
         });
     </script>
 
