@@ -397,7 +397,7 @@
                                     <option value="CDI">CDI</option>
                                     <option value="CDD">CDD</option>
                                     <option value="Stage">Stage</option>
-                                    <option value="Consultant">Consultant</option>
+                                   option <option value="Consultant">Consultant</option>
                                 </select>
                             </div>
 
@@ -419,8 +419,10 @@
                                 <select name="work_location" class="form-select" style="border-radius:0;">
                                     <option value="">{{ __('Select Work Location') }}</option>
                                     <option value="Head Office">{{ __('Head Office') }}</option>
-                                    <option value="Site A">{{ __('Site A') }}</option>
-                                    <option value="Site B">{{ __('Site B') }}</option>
+                                    <option value="Kolwezi">{{ __('Kolwezi') }}</option>
+                                    <option value="Kolwezi Garage">{{ __('Kolwezi Garage') }}</option>
+                                    <option value="Kamoa copper sa">{{ __('Komoa copper sa') }}</option>
+{{--                                    <option value="Site B">{{ __('Site B') }}</option>--}}
                                     <option value="Remote">{{ __('Remote') }}</option>
                                 </select>
                             </div>
@@ -430,9 +432,7 @@
                                 <label class="form-label fw-bold">{{ __('Supervisor') }}</label>
                                 <select name="supervisor" class="form-select" style="border-radius:0;">
                                     <option value="">{{ __('Select Supervisor') }}</option>
-                                    <option value="HR Manager">{{ __('HR Manager') }}</option>
-                                    <option value="Operations Manager">{{ __('Operations Manager') }}</option>
-                                    <option value="Finance Director">{{ __('Finance Director') }}</option>
+                                    <option value="NELLY KUZO">{{ __('NELLY KUZO') }}</option>
                                 </select>
                             </div>
 
