@@ -156,7 +156,7 @@
                                 <label class="form-label fw-bold">
                                     First Name <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="first_name" class="form-control" placeholder="Jean Luc"
+                                <input type="text" name="first_name" class="form-control" placeholder="John"
                                        required
                                        style="border-radius:0;"
                                        pattern="[A-Za-z\s]{3,}"
@@ -171,7 +171,7 @@
                                 <label class="form-label fw-bold">
                                     Last Name <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="last_name" class="form-control" placeholder="Kawel"
+                                <input type="text" name="last_name" class="form-control" placeholder="Doe"
                                        required
                                        style="border-radius:0;"
                                        pattern="[A-Za-z\s]{3,}"
@@ -184,7 +184,7 @@
                             <!-- Middle Name -->
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Middle Name</label>
-                                <input type="text" name="middle_name" class="form-control" placeholder="A Mbumb"
+                                <input type="text" name="middle_name" class="form-control" placeholder="Smirth"
                                        style="border-radius:0;"
                                        pattern="[A-Za-z\s]{3,}"
                                        title="Middle name must be at least 3 letters"
@@ -342,7 +342,7 @@
                                     Email
                                 </label>
                                 <input type="email" name="employee_email" class="form-control"
-                                       placeholder="jeanluckawel45@mail.com"
+                                       placeholder="johndoe@mail.com"
                                        style="border-radius:0;"
                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                                        title="Enter a valid email address"
