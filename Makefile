@@ -11,7 +11,8 @@ deploy-refresh:
 	php artisan key:generate
 
 refresh:
-	php artisan migrate:fresh --seed --step
+	php artisan migrate:refresh --seed
+
 
 
 install: .env vendor/autoload.php public/storage
