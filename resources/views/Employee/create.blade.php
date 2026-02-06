@@ -361,12 +361,15 @@
 
 
                             <!-- Department -->
+                            <!-- Department -->
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('Department') }}</label>
-                                <select id="department" name="department" class="form-select" style="border-radius:0;">
+                                <select id="department" name="department_id" class="form-select" style="border-radius:0;">
                                     <option value="">{{ __('Select Department') }}</option>
                                     @foreach($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                        <option value="{{ $department->id }}">
+                                            {{ $department->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -374,7 +377,7 @@
                             <!-- Section -->
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('Section') }}</label>
-                                <select id="section" name="section" class="form-select" style="border-radius:0;">
+                                <select id="section" name="section_id" class="form-select" style="border-radius:0;">
                                     <option value="">{{ __('Select Section') }}</option>
                                 </select>
                             </div>
@@ -382,10 +385,11 @@
                             <!-- Job Title -->
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">{{ __('Job Title') }}</label>
-                                <select id="job_title" name="job_title" class="form-select" style="border-radius:0;">
+                                <select id="job_title" name="job_title_id" class="form-select" style="border-radius:0;">
                                     <option value="">{{ __('Select Job Title') }}</option>
                                 </select>
                             </div>
+
 
 
 
