@@ -4,7 +4,7 @@ deploy:
 
 
 deploy-refresh:
-	ssh kit-services 'cd ~/app.kit-services.org && git pull && make install && make refresh'
+	ssh kit-services  'cd ~/app.kit-services.org && git pull && make install && make refresh'
 
 .env:
 	cp .env.example .env

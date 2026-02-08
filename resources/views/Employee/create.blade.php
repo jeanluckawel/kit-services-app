@@ -156,7 +156,7 @@
                                 <label class="form-label fw-bold">
                                     First Name <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="first_name" class="form-control" placeholder="John"
+                                <input type="text" name="first_name" class="form-control" placeholder="john"
                                        required
                                        style="border-radius:0;"
                                        pattern="[A-Za-z\s]{3,}"
