@@ -92,7 +92,7 @@
             @endcanany
 
 
-            @canany(['customer_list','invoice_statement','customer_create'])
+            <!-- @canany(['customer_list','invoice_statement','customer_create'])
                 <li class="nav-header">Invoices</li>
 
                 @can('customer_list')
@@ -287,7 +287,7 @@
                     </li>
                     <br><br><br>
                 @endcan
-            @endcanany
+            @endcanany -->
 
         </ul>
     </nav>
