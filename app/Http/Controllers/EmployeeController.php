@@ -218,23 +218,8 @@ class EmployeeController extends Controller
             'first_name' => 'nullable|string',
             'last_name'  => 'nullable|string',
             'middle_name'=> 'nullable|string',
-            'gender' => 'nullable|in:M,F',
-            'date_of_birth' => [
-                'nullable',
-                'date',
-                function ($attribute, $value, $fail) {
-                    if ($value) {
-                        try {
-                            $age = \Illuminate\Support\Carbon::parse($value)->age;
-                        } catch (\Exception $e) {
-                            return $fail('La date de naissance est invalide.');
-                        }
-                        if ($age < 18) {
-                            $fail('L\'employé doit avoir au moins 18 ans.');
-                        }
-                    }
-                },
-            ],
+            'gender'     => 'nullable|string',
+            'date_of_birth' => 'nullable|date',
             'number_card'   => 'nullable|string',
             'pays'          => 'nullable|string',
             'marital_status'=> 'nullable|string',
