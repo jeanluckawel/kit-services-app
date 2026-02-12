@@ -14,4 +14,5 @@ class Department extends Model
     public function sections() {
         return $this->hasMany(Section::class);
     }
+
 }

@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 
-
 use App\Models\Employee\Employee;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -19,25 +18,28 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection()
     {
-        $query = Employee::with(['address','company','children','dependants','emergencies','salaries']);
-
+        $query = Employee::with([
+            'address',
+            'company',
+            'children',
+            'dependants',
+            'emergencies',
+            'salaries'
+        ]);
 
         if (!empty($this->filters['gender'])) {
             $query->where('gender', $this->filters['gender']);
         }
 
-
         if (!empty($this->filters['contract_type'])) {
-            $query->whereHas('company', function($q){
+            $query->whereHas('company', function ($q) {
                 $q->where('contract_type', $this->filters['contract_type']);
             });
         }
 
-
-        if (request()->has('status') && request('status') !== '') {
-            $query->where('status', request('status'));
+        if (!empty($this->filters['status'])) {
+            $query->where('status', $this->filters['status']);
         }
-
 
         return $query->get();
     }
@@ -54,16 +56,12 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             'Number Card',
             'Pays',
             'Marital Status',
-
-            // Address
             'Number',
             'City',
             'Province',
             'Phone',
             'Email',
             'Emergency Phone',
-
-            // Company
             'Job Title',
             'Department',
             'Section',
@@ -73,15 +71,11 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             'Work Location',
             'Supervisor',
             'Employee Type',
-
-            // Salaries
             'Base Salary',
             'Category',
             'Echelon',
             'Currency',
-
-//            status
-            'status'
+            'Status'
         ];
     }
 
@@ -102,7 +96,6 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $employee->pays,
             $employee->marital_status,
 
-            // Address
             $address->number ?? '',
             $address->city ?? '',
             $address->province ?? '',
@@ -110,7 +103,6 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $address->email ?? '',
             $address->emergency_phone ?? '',
 
-            // Company
             $company->job_title ?? '',
             $company->department ?? '',
             $company->section ?? '',
@@ -121,7 +113,6 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $company->supervisor ?? '',
             $company->employee_type ?? '',
 
-            // Salary
             $salary->base_salary ?? '',
             $salary->category ?? '',
             $salary->echelon ?? '',
@@ -130,7 +121,4 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $employee->status ?? '',
         ];
     }
-
 }
-
-

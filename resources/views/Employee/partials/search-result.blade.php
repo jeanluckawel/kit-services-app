@@ -39,7 +39,18 @@
                     </div>
                 </td>
 
-                <td>{{ $employee->company->department ?? 'N/A' }}</td>
+                @php
+                    $departments = [
+                        1 => 'Finance',
+                        2 => 'Human Resources',
+                        3 => 'IT',
+                        4 => 'Operations',
+                        5 => 'Marketing',
+                    ];
+                @endphp
+
+                <td>{{ $departments[$employee->company->department] ?? 'N/A' }}</td>
+
                 <td>{{ $employee->age >= 1 ? $employee->age . ' ' . ($employee->age > 1 ? 'ans' : 'an') : '-' }}</td>
                 <td><strong>{{ number_format($employee->salaries->base_salary ?? 0,2) }}</strong></td>
                 <td>{{ $employee->company->hire_date ?? 'N/A' }}</td>
