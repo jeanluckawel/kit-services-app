@@ -411,11 +411,16 @@
                                 <input type="date" name="hire_date" class="form-control" style="border-radius:0;">
                             </div>
 
-                            <!-- End Contract Date -->
-                            <div class="col-md-6 d-none" id="endContractWrapper">
-                                <label class="form-label fw-bold">{{ __('End Contract Date') }}</label>
-                                <input type="date" name="end_contract_date" class="form-control" style="border-radius:0;">
-                            </div>
+                        <!-- End Contract Date -->
+                        <div class="col-md-6 d-none" id="endContractWrapper">
+                            <label class="form-label fw-bold">{{ __('End Contract Date') }}</label>
+                            <input type="date"
+                                name="End Contract Date"
+                                class="form-control"
+                                style="border-radius:0;"
+                                max="9999-12-31"
+                                oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)">
+                        </div>
 
                             <!-- Work Location -->
                             <div class="col-md-6">
