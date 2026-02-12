@@ -11,6 +11,7 @@ use App\Models\Employee\Emergency;
 use App\Models\Employee\Employee;
 use App\Models\Employee\Salary;
 use App\Models\JobTitle;
+use App\Models\Notification;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -337,6 +338,16 @@ class EmployeeController extends Controller
                     ]);
                 }
             }
+
+            Notification::create([
+                'user_id' => auth()->id(),
+                'type' => 'employee',
+                'data' => [
+                    'message' => "Nouvel employé ajouté : {$employee->first_name} {$employee->last_name}"
+                ],
+                'is_read' => false,
+            ]);
+
         });
 
         return redirect()
