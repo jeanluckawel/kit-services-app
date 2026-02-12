@@ -58,4 +58,6 @@ class Employee extends Model
     {
         return $this->hasMany(Payroll::class, 'employee_id','employee_id');
     }
+    
+    
 }
