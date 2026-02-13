@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
@@ -32,14 +31,10 @@ class NotificationController extends Controller
 
     public function markAsRead($id)
     {
-        $notification = DatabaseNotification::where('id', $id)
-            ->where('notifiable_id', Auth::id())
-            ->first();
-
-        if ($notification) {
-            $notification->markAsRead();
+        $notification = Notification::find($id);
+        if ($notification && $notification->user_id == Auth::id()) {
+            $notification->update(['is_read' => true]);
         }
-
-        return response()->json(['status' => 'success']);
+        return redirect()->back();
     }
 }

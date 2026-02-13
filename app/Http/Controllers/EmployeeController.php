@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewEmployeeMail;
 use App\Models\Department;
 use App\Models\Employee\Address;
 use App\Models\Employee\Children;
@@ -16,6 +17,7 @@ use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
@@ -300,29 +302,38 @@ class EmployeeController extends Controller
             $validated['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
-        DB::transaction(function () use ($validated, $addressData, $companyData, $salaryData, $emergencyData, $childrenRequest, $dependantsRequest) {
+        $employee = DB::transaction(function () use (
+            $validated,
+            $addressData,
+            $companyData,
+            $salaryData,
+            $emergencyData,
+            $childrenRequest,
+            $dependantsRequest
+        ) {
             $latest = Employee::latest('id')->first();
             $nextId = $latest ? $latest->id + 1 : 1;
+
             $validated['employee_id'] = 'KAM_KIT' . str_pad($nextId, 3, '0', STR_PAD_LEFT);
             $validated['status'] = 1;
 
             $employee = Employee::create($validated);
 
-            Address::create(array_merge($addressData, ['employee_id' => $employee->employee_id]));
-            Company::create(array_merge($companyData, ['employee_id' => $employee->employee_id]));
-            Salary::create(array_merge($salaryData, ['employee_id' => $employee->employee_id]));
+            Address::create([...$addressData, 'employee_id' => $employee->employee_id]);
+            Company::create([...$companyData, 'employee_id' => $employee->employee_id]);
+            Salary::create([...$salaryData, 'employee_id' => $employee->employee_id]);
 
             if (array_filter($emergencyData)) {
-                Emergency::create(array_merge($emergencyData, ['employee_id' => $employee->employee_id]));
+                Emergency::create([...$emergencyData, 'employee_id' => $employee->employee_id]);
             }
 
             if (!empty($childrenRequest['children'])) {
                 foreach ($childrenRequest['children'] as $child) {
                     Children::create([
-                        'employee_id'   => $employee->employee_id,
-                        'full_name'     => $child['full_name'] ?? null,
+                        'employee_id' => $employee->employee_id,
+                        'full_name' => $child['full_name'] ?? null,
                         'date_of_birth' => $child['date_of_birth'] ?? null,
-                        'gender'        => $child['gender'] ?? null,
+                        'gender' => $child['gender'] ?? null,
                     ]);
                 }
             }
@@ -339,16 +350,22 @@ class EmployeeController extends Controller
                 }
             }
 
-            Notification::create([
-                'user_id' => auth()->id(),
-                'type' => 'employee',
-                'data' => [
-                    'message' => "Nouvel employé ajouté : {$employee->first_name} {$employee->last_name}"
-                ],
-                'is_read' => false,
-            ]);
-
+            return $employee;
         });
+
+        Notification::create([
+            'user_id' => auth()->id(),
+            'type' => 'employee',
+            'data' => [
+                'message' => "Nouvel employé ajouté : {$employee->first_name} {$employee->last_name}"
+            ],
+            'is_read' => false,
+        ]);
+
+        Mail::to('okitobo7@gmail.com')
+            ->cc(['kitservice17@gmail.com','test@kit-services.org'])
+            ->send(new NewEmployeeMail($employee));
+
 
         return redirect()
             ->route('employee.list')
