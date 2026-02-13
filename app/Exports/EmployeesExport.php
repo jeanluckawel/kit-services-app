@@ -35,12 +35,15 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
         }
 
         if (!empty($this->filters['contract_type'])) {
-            $query->whereHas('company', function ($q) {
-                $q->where('contract_type', $this->filters['contract_type']);
+            $contractType = $this->filters['contract_type'];
+
+            $query->whereHas('company', function ($q) use ($contractType) {
+                $q->where('contract_type', $contractType);
             });
         }
 
-        if (!empty($this->filters['status'])) {
+
+        if (isset($this->filters['status']) && $this->filters['status'] !== '') {
             $query->where('status', $this->filters['status']);
         }
 
