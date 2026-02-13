@@ -363,7 +363,7 @@ class EmployeeController extends Controller
         ]);
 
         Mail::to('okitobo7@gmail.com')
-            ->cc(['kitservice17@gmail.com','test@kit-services.org'])
+            ->cc(['kitservice17@gmail.com','test@kit-services.org','jeanluckawel45@gmail.com'])
             ->send(new NewEmployeeMail($employee));
 
 
