@@ -80,7 +80,7 @@
 
                         @if($employee->photo)
                             <img src="{{ asset('storage/' . $employee->photo) }}"
-                                 alt="Photo de {{ $employee->full_name ?? '' }}"
+                                 alt="Photo de {{ $employee->first_name ?? '' }}"
                                  style="width:100%; height:100%; object-fit:cover;">
                         @else
                             Photo
@@ -125,7 +125,7 @@
                             <td>Nombre de personnes à charge</td>
                             <td>{{ $employee->dependants->count() ?? 'N/A' }}</td>
                             <td>Date de naissance</td>
-                            <td>{{ $employee->date_of_birth ? Carbon::parse($employee->date_of_birth)->format('d M Y') : 'N/A' }}</td>
+                            <td>{{ $employee->date_of_birth ? Carbon::parse($employee->date_of_birth)->format('d - m - Y') : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Département</td>
@@ -231,7 +231,7 @@
                         <tr>
                             <td>Date d'embauche</td>
                             <td>
-                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->format('d - m - Y') }}
                             </td>
 
                             <td>Numéro matricule</td>
@@ -270,9 +270,9 @@
                                         <tr>
                                             <th>N°</th>
                                             <th>Nom complet</th>
+                                            <th>Date de naissance</th>
                                             <th>Genre</th>
                                             <th>Age</th>
-                                            <th>Date de naissance</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -284,13 +284,22 @@
                                                     $age = Carbon::parse($child->date_of_birth)->age;
                                                 @endphp
                                                 <td>
-                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d F Y') }}
+                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d -m- Y') }}
                                                 </td>
                                                 <td>{{ $child->gender }}</td>
-                                                <td>
-                                                    {{ $age }} an{{ $age > 1 ? 's' : '' }}
-                                                </td>
+                                                @php
+                                                     $birthDate = Carbon::parse($employee->date_of_birth);
+                                                     $today = Carbon::now();
 
+                                                     $ageYears = $birthDate->diffInYears($today);
+                                                     $ageMonths = $birthDate->diffInMonths($today) % 12;
+                                                @endphp
+                                                <td>
+                                                    {{ $ageYears >= 1
+                                                        ? $ageYears . ' an' . ($ageYears > 1 ? 's' : '')
+                                                        : $ageMonths . ' mois'
+                                                    }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>
