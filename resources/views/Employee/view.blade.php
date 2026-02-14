@@ -121,7 +121,7 @@
                         </tr>
                         <tr>
                             <td>Département</td>
-                            <td>{{ $employee->company->department ?? 'N/A' }}</td>
+                            <td>{{ $employee->company?->departmentRelation?->name ?? 'N/A' }}</td>
                             <td>Pays</td>
                             <td>{{ $employee->pays }}</td>
                         </tr>
@@ -199,13 +199,13 @@
                         </tr>
                         <tr>
                             <td>Emploi / Poste</td>
-                            <td colspan="3">{{ $employee->company->job_title ?? 'N/A' }}</td>
+                            <td colspan="3">{{ $employee->company->jobTitleRelation->name ?? 'N/A' }}</td>
                         </tr>
                         <tr>
-                            <td>Classification;</td>
-                            <td>{{ $employee->company->department ?? 'N/A' }}</td>
+                            <td>Section</td>
+                            <td>{{ $employee->company?->DepartmentRelation?->name ?? 'N/A' }}</td>
                             <td>Position</td>
-                            <td>{{ $employee->company->job_titles }}</td>
+                            <td>{{ $employee->company?->jobTitleRelation?->name ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Niveau</td>

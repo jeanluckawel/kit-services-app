@@ -352,7 +352,11 @@ class EmployeeController extends Controller
     public function show(Employee $employee)
     {
 
-        $employee->load('address', 'company', 'salaries', 'emergencies', 'children', 'dependants');
+        $employee->load('address', 'company', 'salaries', 'emergencies', 'children', 'dependants'
+           ,'company.departmentRelation',
+            'company.sectionRelation',
+            'company.jobTitleRelation'
+        );
 
         return view('Employee.view', compact('employee'));
     }
