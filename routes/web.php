@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeExport;
 use App\Http\Controllers\EmployeeImportController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseTypeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PerceptionController;
@@ -270,6 +272,12 @@ Route::middleware(['auth','verified'])->group(function () {
 
     Route::get('/get-sections/{department}', [EmployeeController::class, 'getSections']);
     Route::get('/get-job-titles/{section}', [EmployeeController::class, 'getJobTitles']);
+
+
+    Route::get('/notifications', [DashboardController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+
 
 
 });

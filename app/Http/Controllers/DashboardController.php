@@ -4,15 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee\Employee;
 use App\Models\Expense;
+use App\Models\Notification;
 use App\Models\Payroll;
 use App\Models\Perception;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class  DashboardController extends Controller
 {
     public function index()
     {
+
+
+        $user = Auth::user();
+
+
+        $notifications = Notification::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+
+        $unreadCount = Notification::where('user_id', $user->id)
+            ->where('is_read', false)
+            ->count();
+
         $employees = Employee::where('status', 1)->get();
         $employeeCount = Employee::where('status', 1)->count();
 
@@ -36,7 +53,19 @@ class  DashboardController extends Controller
             'employeeCount',
             'user',
             'balanceUSD',
-            'balanceCDF'
+            'balanceCDF',
+            'notifications',
+            'unreadCount'
         ));
+    }
+
+
+    public function markAsRead($id)
+    {
+        $notification = Notification::find($id);
+        if ($notification && $notification->user_id == Auth::id()) {
+            $notification->update(['is_read' => true]);
+        }
+        return redirect()->back();
     }
 }
