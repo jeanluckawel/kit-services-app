@@ -25,11 +25,13 @@
             background-color: #fff;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
             position: relative;
+            /* Bordure générale retirée */
         }
 
         .table td, .table th {
             vertical-align: middle;
             border-radius: 0 !important;
+            border: 1px solid #000 !important; /* Bordures visibles pour le tableau */
         }
 
         .photo-box, .signature-box, .alert {
@@ -42,17 +44,40 @@
             object-fit: contain;
         }
 
+        .btn-pdf {
+            background-color: #FF6600;
+            border: none;
+            color: #fff;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        .btn-pdf:hover {
+            background-color: #e65c00;
+        }
+
         @media (max-width: 768px) {
             .fiche {
                 padding: 1rem;
                 font-size: 10px;
             }
-
             .fiche .row > [class*="col-"] {
                 margin-bottom: 1rem;
             }
         }
     </style>
+
+    <!-- Boutons Voir PDF et Télécharger PDF -->
+    <div class="mb-3 text-end" style="width: 100%; max-width: 21cm; margin: auto;">
+        <button id="viewPdfBtn" class="btn-pdf">
+            <i class="bi bi-eye"></i> Voir PDF
+        </button>
+        <button id="downloadPdfBtn" class="btn-pdf">
+            <i class="bi bi-download"></i> Télécharger PDF
+        </button>
+    </div>
 
     <div class="fiche-wrapper">
 
@@ -88,10 +113,10 @@
                     </div>
                 </div>
 
-
                 <div class="col-md-10 table-responsive">
                     <table class="table table-bordered table-sm mb-0" style="font-size:11px;">
                         <tbody>
+                        <!-- Informations Personnelles -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Personnelles</th>
                         </tr>
@@ -171,7 +196,6 @@
                                         $employee->address->number ? 'Nº'.$employee->address->number : null,
                                         $employee->address->city ?: null,
                                         $employee->address->province ?: null,
-//                                        $employee->address->emergency_phone ?: null,
                                         $employee->pays ?: null,
                                     ]))
                                 }}
@@ -189,39 +213,29 @@
                         </tr>
                         <tr>
                             <td>Niveau</td>
-                            <td>{{ $employee->salaries->category }}</td>
+                            <td>{{ $employee->salaries->category ?? 'N/A' }}</td>
                             <td>Coefficient</td>
-                            <td>{{ number_format($employee->salaries->base_salary,2 ?? 'N/A' ) }}</td>
+                            <td>{{ number_format($employee->salaries->base_salary ?? 0, 2) }}</td>
                         </tr>
                         <tr>
                             <td>Échelon</td>
-                            <td>{{ $employee->salaries->echelon }}</td>
+                            <td>{{ $employee->salaries->echelon ?? 'N/A' }}</td>
                             <td>Taux horaire brut (FC)</td>
                             <td>FC 2.200</td>
                         </tr>
                         <tr>
                             <td>Salaire mensuel brut</td>
-                            <td>{{ $employee->salaries->currency .' ' . number_format ($employee->salaries->base_salary,2 )?? ''}}</td>
+                            <td>{{ $employee->salaries->currency ?? '' }} {{ number_format($employee->salaries->base_salary ?? 0, 2) }}</td>
                             @php
                                 $currency = $employee->salaries->currency ?? '';
                                 $salary   = $employee->salaries->base_salary ?? 0;
 
                                 $contractType = strtolower($employee->company->contract_type ?? 'full time');
-
-                                if($contractType == 'part time'){
-                                    $hoursPerDay = 4;
-                                } else {
-                                    $hoursPerDay = 8; // Full Time
-                                }
-
+                                $hoursPerDay = ($contractType == 'part time') ? 4 : 8;
                                 $daysPerWeek = 5;
                                 $weeksPerMonth = 4;
-
                                 $monthlyHours = $hoursPerDay * $daysPerWeek * $weeksPerMonth;
-
                                 $hourlySalary = $monthlyHours > 0 ? $salary / $monthlyHours : 0;
-                                $dailySalary  = $hourlySalary * $hoursPerDay;
-                                $weeklySalary = $dailySalary * $daysPerWeek;
                             @endphp
                             <td>Horaire hebdomadaire </td>
                             <td>
@@ -230,10 +244,7 @@
                         </tr>
                         <tr>
                             <td>Date d'embauche</td>
-                            <td>
-                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->format('d - m - Y') }}
-                            </td>
-
+                            <td>{{ \Carbon\Carbon::parse($employee->company->hire_date)->format('d - m - Y') }}</td>
                             <td>Numéro matricule</td>
                             <td>{{ $employee->employee_id }}</td>
                         </tr>
@@ -279,13 +290,8 @@
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                 <td>{{ $child->full_name }}</td>
-                                                @php
-                                                    $age = Carbon::parse($child->date_of_birth)->age;
-                                                @endphp
                                                 <td>{{ $child->gender }}</td>
-                                                <td>
-                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d -m- Y') }}
-                                                </td>
+                                                <td>{{ Carbon::parse($child->date_of_birth)->translatedFormat('d -m- Y') }}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -330,11 +336,8 @@
             <div class="alert alert-warning p-2 mb-3" role="alert" style="font-size:10px;">
                 <strong>Attention :</strong>
                 <ul class="mb-0">
-                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.
-                    </li>
-                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des
-                        salaires.
-                    </li>
+                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.</li>
+                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des salaires.</li>
                 </ul>
             </div>
 
@@ -355,4 +358,30 @@
 
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        const element = document.querySelector(".fiche");
+
+        const opt = {
+            margin:       [0.5, 0.5, 0.5, 0.5],
+            filename:     '{{ $employee->first_name ?? "fiche" }}_fiche.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, logging: true, letterRendering: true },
+            jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Voir PDF (nouvel onglet)
+        document.getElementById("viewPdfBtn").addEventListener("click", () => {
+            html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                window.open(blobUrl, '_blank');
+            });
+        });
+
+        // Télécharger PDF (force download)
+        document.getElementById("downloadPdfBtn").addEventListener("click", () => {
+            html2pdf().set(opt).from(element).save(); // save() force le téléchargement
+        });
+    </script>
 @endsection
