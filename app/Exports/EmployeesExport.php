@@ -16,6 +16,9 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
         $this->filters = $filters;
     }
 
+    /**
+     * Récupération des employés avec relations
+     */
     public function collection()
     {
         $query = Employee::with([
@@ -24,7 +27,7 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             'children',
             'dependants',
             'emergencies',
-            'salaries'
+            'salaries',
         ]);
 
         if (!empty($this->filters['gender'])) {
@@ -32,18 +35,24 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
         }
 
         if (!empty($this->filters['contract_type'])) {
-            $query->whereHas('company', function ($q) {
-                $q->where('contract_type', $this->filters['contract_type']);
+            $contractType = $this->filters['contract_type'];
+
+            $query->whereHas('company', function ($q) use ($contractType) {
+                $q->where('contract_type', $contractType);
             });
         }
 
-        if (!empty($this->filters['status'])) {
+
+        if (isset($this->filters['status']) && $this->filters['status'] !== '') {
             $query->where('status', $this->filters['status']);
         }
 
         return $query->get();
     }
 
+    /**
+     * En-têtes Excel
+     */
     public function headings(): array
     {
         return [
@@ -75,15 +84,27 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             'Category',
             'Echelon',
             'Currency',
-            'Status'
+            'Status',
         ];
     }
 
+    /**
+     * Mapping ligne Excel
+     */
     public function map($employee): array
     {
-        $address = $employee->address?->first();
-        $company = $employee->company?->first();
-        $salary  = $employee->salaries?->first();
+        // 🔐 Sécurisation : on filtre par employee_id
+        $address = $employee->address
+            ->where('employee_id', $employee->employee_id)
+            ->first();
+
+        $company = $employee->company
+            ->where('employee_id', $employee->employee_id)
+            ->first();
+
+        $salary = $employee->salaries
+            ->where('employee_id', $employee->employee_id)
+            ->first();
 
         return [
             $employee->employee_id,
@@ -96,6 +117,7 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $employee->pays,
             $employee->marital_status,
 
+            // Address
             $address->number ?? '',
             $address->city ?? '',
             $address->province ?? '',
@@ -103,6 +125,7 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $address->email ?? '',
             $address->emergency_phone ?? '',
 
+            // Company
             $company->job_title ?? '',
             $company->department ?? '',
             $company->section ?? '',
@@ -113,11 +136,13 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $company->supervisor ?? '',
             $company->employee_type ?? '',
 
+            // Salary
             $salary->base_salary ?? '',
             $salary->category ?? '',
             $salary->echelon ?? '',
             $salary->currency ?? '',
 
+            // Status
             $employee->status ?? '',
         ];
     }
