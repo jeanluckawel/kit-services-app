@@ -30,6 +30,7 @@
         .table td, .table th {
             vertical-align: middle;
             border-radius: 0 !important;
+            border: 1px solid #000 !important; /* assure bordure pour PDF */
         }
 
         .photo-box, .signature-box, .alert {
@@ -52,11 +53,27 @@
                 margin-bottom: 1rem;
             }
         }
+
+        /* Styles pour impression */
+        @media print {
+            .table-responsive {
+                overflow: visible !important;
+                display: block !important;
+            }
+            .fiche {
+                box-shadow: none !important;
+                padding: 1cm !important;
+            }
+            .d-print-none {
+                display: none !important;
+            }
+            .table th, .table td {
+                border: 1px solid #000 !important;
+            }
+        }
     </style>
 
     <div class="fiche-wrapper">
-
-        <!-- Fiche principale -->
         <div class="fiche">
 
             <!-- En-tête -->
@@ -88,10 +105,11 @@
                     </div>
                 </div>
 
-
-                <div class="col-md-10 table-responsive">
-                    <table class="table table-bordered table-sm mb-0" style="font-size:11px;">
+                <div class="col-md-10">
+                    <table class="table table-bordered table-sm mb-0" style="font-size:11px; width:100%;">
                         <tbody>
+
+                        <!-- Informations personnelles -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Personnelles</th>
                         </tr>
@@ -131,7 +149,7 @@
                             <td>Département</td>
                             <td>{{ $employee->company?->departmentRelation?->name ?? 'N/A' }}</td>
                             <td>Pays</td>
-                            <td>{{ $employee->pays }}</td>
+                            <td>{{ $employee->pays ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>N° carte CNSS</td>
@@ -140,7 +158,7 @@
                             <td>{{ $employee->number_card ?? 'N/A' }}</td>
                         </tr>
 
-                        <!-- Familiales -->
+                        <!-- Informations familiales -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Familiales</th>
                         </tr>
@@ -159,7 +177,7 @@
                             </tr>
                         @endforelse
 
-                        <!-- Professionnelles -->
+                        <!-- Informations professionnelles -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Professionnelles</th>
                         </tr>
@@ -171,7 +189,6 @@
                                         $employee->address->number ? 'Nº'.$employee->address->number : null,
                                         $employee->address->city ?: null,
                                         $employee->address->province ?: null,
-//                                        $employee->address->emergency_phone ?: null,
                                         $employee->pays ?: null,
                                     ]))
                                 }}
@@ -179,63 +196,43 @@
                         </tr>
                         <tr>
                             <td>Emploi / Poste</td>
-                            <td colspan="3">{{ $employee->company->jobTitleRelation->name ?? 'N/A' }}</td>
+                            <td colspan="3">{{ $employee->company?->jobTitleRelation?->name ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Section</td>
-                            <td>{{ $employee->company?->DepartmentRelation?->name ?? 'N/A' }}</td>
+                            <td>{{ $employee->company?->sectionRelation?->name ?? 'N/A' }}</td>
                             <td>Position</td>
                             <td>{{ $employee->company?->jobTitleRelation?->name ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Niveau</td>
-                            <td>{{ $employee->salaries->category }}</td>
+                            <td>{{ $employee->salaries->category ?? 'N/A' }}</td>
                             <td>Coefficient</td>
-                            <td>{{ number_format($employee->salaries->base_salary,2 ?? 'N/A' ) }}</td>
+                            <td>{{ number_format($employee->salaries->base_salary ?? 0,2) }}</td>
                         </tr>
                         <tr>
                             <td>Échelon</td>
-                            <td>{{ $employee->salaries->echelon }}</td>
+                            <td>{{ $employee->salaries->echelon ?? 'N/A' }}</td>
                             <td>Taux horaire brut (FC)</td>
-                            <td>FC 2.200</td>
-                        </tr>
-                        <tr>
-                            <td>Salaire mensuel brut</td>
-                            <td>{{ $employee->salaries->currency .' ' . number_format ($employee->salaries->base_salary,2 )?? ''}}</td>
-                            @php
-                                $currency = $employee->salaries->currency ?? '';
-                                $salary   = $employee->salaries->base_salary ?? 0;
-
-                                $contractType = strtolower($employee->company->contract_type ?? 'full time');
-
-                                if($contractType == 'part time'){
-                                    $hoursPerDay = 4;
-                                } else {
-                                    $hoursPerDay = 8; // Full Time
-                                }
-
-                                $daysPerWeek = 5;
-                                $weeksPerMonth = 4;
-
-                                $monthlyHours = $hoursPerDay * $daysPerWeek * $weeksPerMonth;
-
-                                $hourlySalary = $monthlyHours > 0 ? $salary / $monthlyHours : 0;
-                                $dailySalary  = $hourlySalary * $hoursPerDay;
-                                $weeklySalary = $dailySalary * $daysPerWeek;
-                            @endphp
-                            <td>Horaire hebdomadaire </td>
                             <td>
+                                @php
+                                    $currency = $employee->salaries->currency ?? '';
+                                    $salary   = $employee->salaries->base_salary ?? 0;
+                                    $contractType = strtolower($employee->company->employee_type ?? 'full time');
+                                    $hoursPerDay = $contractType == 'part time' ? 4 : 8;
+                                    $daysPerWeek = 5;
+                                    $weeksPerMonth = 4;
+                                    $monthlyHours = $hoursPerDay * $daysPerWeek * $weeksPerMonth;
+                                    $hourlySalary = $monthlyHours > 0 ? $salary / $monthlyHours : 0;
+                                @endphp
                                 {{ $currency }} {{ number_format($hourlySalary,2) }}
                             </td>
                         </tr>
                         <tr>
                             <td>Date d'embauche</td>
-                            <td>
-                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->format('d - m - Y') }}
-                            </td>
-
+                            <td>{{ $employee->company?->hire_date ? Carbon::parse($employee->company->hire_date)->format('d - m - Y') : 'N/A' }}</td>
                             <td>Numéro matricule</td>
-                            <td>{{ $employee->employee_id }}</td>
+                            <td>{{ $employee->employee_id ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Type de contrat</td>
@@ -244,97 +241,99 @@
                             <td>{{ $employee->company->work_location ?? 'N/A'}}</td>
                         </tr>
 
-                        <!-- Conjoint & Enfants -->
+                        <!-- Conjoint(e) -->
                         <tr class="table-secondary">
                             <th colspan="4">Conjoint(e) et Enfants</th>
                         </tr>
-                        <tr>
-                            <td>Nom du conjoint(e)</td>
-                            @forelse($employee->dependants as $dependant)
-                                @if(strtolower($dependant->relationship) === 'spouse')
-                                    <td colspan="3">
+                        @forelse($employee->dependants as $dependant)
+                            @if(strtolower($dependant->relationship) === 'spouse')
+                                <tr>
+                                    <td colspan="4">
                                         {{ $dependant->full_name ?? 'N/A' }} -
                                         {{ $dependant->phone ?? 'N/A' }} -
                                         {{ $dependant->address ?? 'N/A' }}
                                     </td>
-                                @endif
-                            @empty
-                                <td colspan="3" class="text-center">Aucun conjoint enregistré</td>
-                            @endforelse
-                        </tr>
+                                </tr>
+                            @endif
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center">Aucun conjoint enregistré</td>
+                            </tr>
+                        @endforelse
+
+                        <!-- Enfants -->
                         <tr>
                             <td colspan="4">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-sm mb-0" style="font-size:10px;">
-                                        <thead class="table-light">
+                                <table class="table table-bordered table-sm mb-0" style="font-size:10px; width:100%;">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Nom complet</th>
+                                        <th>Genre</th>
+                                        <th>Date de naissance</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($employee->children as $child)
+                                        @php
+                                            $childAgeYears = Carbon::parse($child->date_of_birth)->diffInYears(now());
+                                            $childAgeMonths = Carbon::parse($child->date_of_birth)->diffInMonths(now()) % 12;
+                                        @endphp
                                         <tr>
-                                            <th>N°</th>
-                                            <th>Nom complet</th>
-                                            <th>Genre</th>
-                                            <th>Date de naissance</th>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td>{{ $child->full_name }}</td>
+                                            <td>{{ $child->gender }}</td>
+                                            <td>
+                                                {{ $childAgeYears >= 1
+                                                    ? $childAgeYears . ' an' . ($childAgeYears > 1 ? 's' : '')
+                                                    : $childAgeMonths . ' mois'
+                                                }}
+                                            </td>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($employee->children as $child)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td>{{ $child->full_name }}</td>
-                                                @php
-                                                    $age = Carbon::parse($child->date_of_birth)->age;
-                                                @endphp
-                                                <td>{{ $child->gender }}</td>
-                                                <td>
-                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d -m- Y') }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
 
-                        <!-- Personne à contacter -->
+                        <!-- Personne à contacter en urgence -->
                         <tr class="table-secondary">
                             <th colspan="4">Personne à contacter en cas d'urgence</th>
                         </tr>
                         <tr>
                             <td colspan="4">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-sm mb-0" style="font-size:10px;">
-                                        <thead class="table-light">
-                                        <tr>
-                                            <th>N°</th>
-                                            <th>Nom Complet</th>
-                                            <th>Adresse</th>
-                                            <th>Numéro Téléphone</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td>{{ $employee->emergencies->full_name ?? '' }}</td>
-                                            <td>{{ $employee->emergencies->address ?? '' }}</td>
-                                            <td>{{ $employee->emergencies->phone ?? '' }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table class="table table-bordered table-sm mb-0" style="font-size:10px; width:100%;">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Nom Complet</th>
+                                        <th>Adresse</th>
+                                        <th>Numéro Téléphone</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-center">1</td>
+                                        <td>{{ $employee->emergencies->full_name ?? 'N/A' }}</td>
+                                        <td>{{ $employee->emergencies->address ?? 'N/A' }}</td>
+                                        <td>{{ $employee->emergencies->phone ?? 'N/A' }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
+
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Footer / signature -->
             <div class="alert alert-warning p-2 mb-3" role="alert" style="font-size:10px;">
                 <strong>Attention :</strong>
                 <ul class="mb-0">
-                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.
-                    </li>
-                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des
-                        salaires.
-                    </li>
+                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.</li>
+                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des salaires.</li>
                 </ul>
             </div>
 
