@@ -171,23 +171,37 @@
                         </tr>
 
                         <!-- Familiales -->
+                        @php
+
+                            $relationshipMap = [
+                                'father' => 'Père',
+                                'mother' => 'Mère',
+                                'spouse' => 'Conjoint(e)',
+                                'brother'=> 'Frère',
+                                'sister' => 'Sœur',
+                                'mr'     => 'Monsieur',
+                                'mrs'    => 'Madame',
+                                'dr'     => 'Docteur'
+                            ];
+                        @endphp
+
                         <tr class="table-secondary">
                             <th colspan="4">Informations Familiales</th>
                         </tr>
+
                         @forelse($employee->dependants as $dependant)
-                            @if(strtolower($dependant->relationship) !== 'spouse')
-                                <tr>
-                                    <td>{{ $dependant->relationship ?? 'N/A' }}</td>
-                                    <td>{{ $dependant->full_name ?? 'N/A' }}</td>
-                                    <td>{{ $dependant->phone ?? 'N/A' }}</td>
-                                    <td>{{ $dependant->address ?? 'N/A' }}</td>
-                                </tr>
-                            @endif
+                            <tr>
+                                <td>{{ $relationshipMap[strtolower($dependant->relationship)] ?? ($dependant->relationship ?? 'N/A') }}</td>
+                                <td>{{ $dependant->full_name ?? 'N/A' }}</td>
+                                <td>{{ $dependant->phone ?? 'N/A' }}</td>
+                                <td>{{ $dependant->address ?? 'N/A' }}</td>
+                            </tr>
                         @empty
                             <tr>
                                 <td colspan="4" class="text-center">Aucun dépendant enregistré</td>
                             </tr>
                         @endforelse
+
 
                         <!-- Professionnelles -->
                         <tr class="table-secondary">
