@@ -171,7 +171,7 @@
                                         $employee->address->number ? 'Nº'.$employee->address->number : null,
                                         $employee->address->city ?: null,
                                         $employee->address->province ?: null,
-                                        $employee->address->emergency_phone ?: null,
+//                                        $employee->address->emergency_phone ?: null,
                                         $employee->pays ?: null,
                                     ]))
                                 }}
