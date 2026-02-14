@@ -270,9 +270,8 @@
                                         <tr>
                                             <th>N°</th>
                                             <th>Nom complet</th>
-                                            <th>Date de naissance</th>
                                             <th>Genre</th>
-                                            <th>Age</th>
+                                            <th>Date de naissance</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -283,22 +282,9 @@
                                                 @php
                                                     $age = Carbon::parse($child->date_of_birth)->age;
                                                 @endphp
+                                                <td>{{ $child->gender }}</td>
                                                 <td>
                                                     {{ Carbon::parse($child->date_of_birth)->translatedFormat('d -m- Y') }}
-                                                </td>
-                                                <td>{{ $child->gender }}</td>
-                                                @php
-                                                     $birthDate = Carbon::parse($employee->date_of_birth);
-                                                     $today = Carbon::now();
-
-                                                     $ageYears = $birthDate->diffInYears($today);
-                                                     $ageMonths = $birthDate->diffInMonths($today) % 12;
-                                                @endphp
-                                                <td>
-                                                    {{ $ageYears >= 1
-                                                        ? $ageYears . ' an' . ($ageYears > 1 ? 's' : '')
-                                                        : $ageMonths . ' mois'
-                                                    }}
                                                 </td>
                                             </tr>
                                         @endforeach
