@@ -269,10 +269,10 @@
                                         <thead class="table-light">
                                         <tr>
                                             <th>N°</th>
-                                            <th>Prénom</th>
-                                            <th>Date de naissance</th>
+                                            <th>Nom complet</th>
                                             <th>Genre</th>
                                             <th>Age</th>
+                                            <th>Date de naissance</th>
                                         </tr>
                                         </thead>
                                         <tbody>
