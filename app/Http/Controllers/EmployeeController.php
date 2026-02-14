@@ -258,6 +258,22 @@ class EmployeeController extends Controller
             'employee_type' => 'nullable|string',
         ]);
 
+        // Récupérer le nom du département si un ID est fourni
+        if (!empty($companyData['department'])) {
+            $department = Department::find($companyData['department']);
+            if ($department) {
+                $companyData['department'] = $department->name;
+            }
+        }
+
+        // Récupérer le nom de la section si un ID est fourni
+        if (!empty($companyData['section'])) { 
+            $section = Section::find($companyData['section']);
+            if ($section) {
+                $companyData['section'] = $section->name;
+            }
+        }
+
         $salaryRequest = $request->validate([
             'salary_base_salary' => 'nullable|numeric',
             'salary_category'    => 'nullable|string',
