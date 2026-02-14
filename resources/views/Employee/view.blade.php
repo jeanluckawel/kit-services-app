@@ -15,6 +15,10 @@
             background-color: #f8f9fa;
             min-height: 100vh;
         }
+        .page-break-after {
+            page-break-after: always; /* force un saut de page après l'élément */
+        }
+
 
         .fiche {
             width: 100%;
@@ -333,13 +337,14 @@
                 </div>
             </div>
 
-            <div class="alert alert-warning p-2 mb-3" role="alert" style="font-size:10px;">
+            <div class="alert alert-warning p-2 mb-3 page-break-after" role="alert" style="font-size:10px;">
                 <strong>Attention :</strong>
                 <ul class="mb-0">
                     <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.</li>
                     <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des salaires.</li>
                 </ul>
             </div>
+
 
             <div class="row mt-3 text-center" style="font-size:10px;">
                 <div class="col-md-6 mb-2 mb-md-0">
