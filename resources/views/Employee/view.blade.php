@@ -188,6 +188,12 @@
                         <tr class="table-secondary">
                             <th colspan="4">Informations Familiales</th>
                         </tr>
+                        <tr>
+                            <td>Relation</td>
+                            <td>Nom Complet</td>
+                            <td>Nº Telephone</td>
+                            <td>Adresse</td>
+                        </tr>
 
                         @forelse($employee->dependants as $dependant)
                             <tr>
