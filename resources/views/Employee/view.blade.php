@@ -105,7 +105,15 @@
                             <td>Prénom</td>
                             <td>{{ $employee->last_name ?? 'N/A' }}</td>
                             <td>Situation familiale</td>
-                            <td>{{ $employee->marital_status ?? 'N/A' }}</td>
+                            @php
+                                $statusMap = [
+                                    'single'  => 'célibataire',
+                                    'married' => $employee->gender === 'Female' ? 'mariée' : 'marié',
+                                    'divorced'=> $employee->gender === 'Female' ? 'divorcée' : 'divorcé',
+                                    'widowed' => $employee->gender === 'Female' ? 'veuve' : 'veuf',
+                                ];
+                            @endphp
+                            <td>{{ $statusMap[$employee->marital_status] ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Post nom</td>
@@ -115,9 +123,9 @@
                         </tr>
                         <tr>
                             <td>Nombre de personnes à charge</td>
-                            <td>{{ $employee->last_name ?? 'N/A' }}</td>
+                            <td>{{ $employee->dependants->count() ?? 'N/A' }}</td>
                             <td>Date de naissance</td>
-                            <td>{{ $employee->date_of_birth ? Carbon::parse($employee->date_of_birth)->format('d M Y') : 'N/A' }}</td>
+                            <td>{{ $employee->date_of_birth ? Carbon::parse($employee->date_of_birth)->format('d - m - Y') : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Département</td>
@@ -127,7 +135,7 @@
                         </tr>
                         <tr>
                             <td>N° carte CNSS</td>
-                            <td>________________________</td>
+                            <td></td>
                             <td>N° pièce d'identité</td>
                             <td>{{ $employee->number_card }}</td>
                         </tr>
@@ -161,40 +169,16 @@
                             <td>Adresse complète</td>
                             <td colspan="3">
                                 {{
-                                    ($employee->address->number
-                                        ? 'N)' . $employee->address->number
-                                        : ''
-                                    )
-
-                                    . ','.
-
-                                    ($employee->address->city
-                                        ? ' Avenue ' . $employee->address->city
-                                        : ''
-                                    )
-
-                                              . ','.
-
-                                    ($employee->address->province
-                                        ? ' quartier ' . $employee->address->province
-                                        : ''
-                                    )
-
-                                          . ','.
-
-                                    ($employee->address->emergency_phone
-                                        ? ' province ' . $employee->address->emergency_phone
-                                        : ''
-                                    )
-
-                                       . ','.
-
-                                    ($employee->pays
-                                        ? ' ' . $employee->pays
-                                        : ''
-                                    )
+                                    implode(', ', array_filter([
+                                        $employee->address->number ? 'Nº'.$employee->address->number : null,
+                                        $employee->address->city ?: null,
+                                        $employee->address->province ?: null,
+//                                        $employee->address->emergency_phone ?: null,
+                                        $employee->pays ?: null,
+                                    ]))
                                 }}
                             </td>
+
 
                         </tr>
                         <tr>
@@ -217,7 +201,7 @@
                             <td>Échelon</td>
                             <td>{{ $employee->salaries->echelon }}</td>
                             <td>Taux horaire brut (FC)</td>
-                            <td>FC 600</td>
+                            <td>FC 2.200</td>
                         </tr>
                         <tr>
                             <td>Salaire mensuel brut</td>
@@ -231,7 +215,7 @@
                                 if($contractType == 'part time'){
                                     $hoursPerDay = 4;
                                 } else {
-                                    $hoursPerDay = 8; // Full Time
+                                    $hoursPerDay = 8;
                                 }
 
                                 $daysPerWeek = 5;
@@ -251,7 +235,7 @@
                         <tr>
                             <td>Date d'embauche</td>
                             <td>
-                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->translatedFormat('d - m - Y') }}
                             </td>
 
                             <td>Numéro matricule</td>
