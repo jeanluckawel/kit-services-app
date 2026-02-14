@@ -7,14 +7,10 @@
 
 @section('content')
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
         .fiche-wrapper {
             display: flex;
             justify-content: center;
-            padding-top: 10px; /* réduit la marge haute */
+            padding-top: 20px;
             position: relative;
             background-color: #f8f9fa;
             min-height: 100vh;
@@ -22,12 +18,12 @@
 
         .fiche {
             width: 100%;
-            max-width: 20cm; /* réduit légèrement la largeur */
-            padding: 1cm; /* padding réduit */
-            font-size: 10px; /* taille de police réduite */
+            max-width: 21cm;
+            padding: 1.5cm;
+            font-size: 11px;
             box-sizing: border-box;
             background-color: #fff;
-            box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
             position: relative;
         }
 
@@ -46,52 +42,42 @@
             object-fit: contain;
         }
 
-        .no-print {
-            margin-bottom: 10px;
-        }
-
         @media (max-width: 768px) {
             .fiche {
-                padding: 0.8rem;
-                font-size: 9px;
+                padding: 1rem;
+                font-size: 10px;
             }
+
             .fiche .row > [class*="col-"] {
-                margin-bottom: 0.5rem;
+                margin-bottom: 1rem;
             }
         }
     </style>
 
-    <div class="container">
-        <!-- Bouton Download -->
-        <div class="text-end no-print">
-            <button id="downloadPdfBtn" class="btn btn-danger" style="border-radius:0;">
-                <i class="bi bi-file-earmark-pdf"></i> Télécharger PDF
-            </button>
-        </div>
-    </div>
-
     <div class="fiche-wrapper">
+
         <!-- Fiche principale -->
         <div class="fiche">
 
             <!-- En-tête -->
-            <div class="d-flex align-items-center justify-content-between border-bottom mb-2">
+            <div class="d-flex align-items-center justify-content-between border-bottom mb-3">
                 <div style="flex:1;">
-                    <h1 class="h5 fw-bold" style="color:#FF6600; margin:0;">Kit Service Sarl</h1>
+                    <h1 class="h4 fw-bold" style="color:#FF6600; margin:0;">Kit Service Sarl</h1>
                 </div>
                 <div class="text-center" style="flex:2;">
-                    <h2 class="h6 fw-bold text-dark" style="margin:0;">Fiche de Renseignement du Salarié</h2>
+                    <h2 class="h5 fw-bold text-dark" style="margin:0;">Fiche de Renseignement du Salarié</h2>
                 </div>
-                <div style="width:100px; height:100px; flex:none;" class="header-logo">
+                <div style="width:120px; height:120px; flex:none;" class="header-logo">
                     <img src="{{ asset('logo/img.png') }}" alt="Logo">
                 </div>
             </div>
 
             <!-- Photo et tableau -->
             <div class="row mb-2">
-                <div class="col-md-2 text-center mb-3 mb-md-0">
+                <div class="col-md-2 text-center mb-5 mb-md-0 ">
                     <div class="border bg-light d-flex align-items-center justify-content-center photo-box"
-                         style="width:120px; height:150px; font-size:9px; overflow:hidden;">
+                         style="width:128px; height:160px; font-size:10px; overflow:hidden;">
+
                         @if($employee->photo)
                             <img src="{{ asset('storage/' . $employee->photo) }}"
                                  alt="Photo de {{ $employee->full_name ?? '' }}"
@@ -102,10 +88,10 @@
                     </div>
                 </div>
 
+
                 <div class="col-md-10 table-responsive">
-                    <table class="table table-bordered table-sm mb-0" style="font-size:10px;">
+                    <table class="table table-bordered table-sm mb-0" style="font-size:11px;">
                         <tbody>
-                        <!-- Informations personnelles -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Personnelles</th>
                         </tr>
@@ -119,7 +105,15 @@
                             <td>Prénom</td>
                             <td>{{ $employee->last_name ?? 'N/A' }}</td>
                             <td>Situation familiale</td>
-                            <td>{{ $employee->marital_status ?? 'N/A' }}</td>
+                            @php
+                                $statusMap = [
+                                    'single'  => 'célibataire',
+                                    'married' => $employee->gender === 'Female' ? 'mariée' : 'marié',
+                                    'divorced'=> $employee->gender === 'Female' ? 'divorcée' : 'divorcé',
+                                    'widowed' => $employee->gender === 'Female' ? 'veuve' : 'veuf',
+                                ];
+                            @endphp
+                            <td>{{ $statusMap[$employee->marital_status] ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <td>Post nom</td>
@@ -129,7 +123,7 @@
                         </tr>
                         <tr>
                             <td>Nombre de personnes à charge</td>
-                            <td>{{ $employee->last_name ?? 'N/A' }}</td>
+                            <td>{{ $employee->dependants->count() ?? 'N/A' }}</td>
                             <td>Date de naissance</td>
                             <td>{{ $employee->date_of_birth ? Carbon::parse($employee->date_of_birth)->format('d M Y') : 'N/A' }}</td>
                         </tr>
@@ -137,7 +131,7 @@
                             <td>Département</td>
                             <td>{{ $employee->company?->departmentRelation?->name ?? 'N/A' }}</td>
                             <td>Pays</td>
-                            <td>{{ $employee->pays ?? 'N/A' }}</td>
+                            <td>{{ $employee->pays }}</td>
                         </tr>
                         <tr>
                             <td>N° carte CNSS</td>
@@ -146,7 +140,7 @@
                             <td>{{ $employee->number_card ?? 'N/A' }}</td>
                         </tr>
 
-                        <!-- Informations familiales -->
+                        <!-- Familiales -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Familiales</th>
                         </tr>
@@ -165,7 +159,7 @@
                             </tr>
                         @endforelse
 
-                        <!-- Informations professionnelles -->
+                        <!-- Professionnelles -->
                         <tr class="table-secondary">
                             <th colspan="4">Informations Professionnelles</th>
                         </tr>
@@ -173,15 +167,13 @@
                             <td>Adresse complète</td>
                             <td colspan="3">
                                 {{
-                                    ($employee->address->number ? 'N)' . $employee->address->number : '')
-                                    . ',' .
-                                    ($employee->address->city ? ' Avenue ' . $employee->address->city : '')
-                                    . ',' .
-                                    ($employee->address->province ? ' quartier ' . $employee->address->province : '')
-                                    . ',' .
-                                    ($employee->address->emergency_phone ? ' province ' . $employee->address->emergency_phone : '')
-                                    . ',' .
-                                    ($employee->pays ? ' ' . $employee->pays : '')
+                                    implode(', ', array_filter([
+                                        $employee->address->number ? 'Nº'.$employee->address->number : null,
+                                        $employee->address->city ?: null,
+                                        $employee->address->province ?: null,
+                                        $employee->address->emergency_phone ?: null,
+                                        $employee->pays ?: null,
+                                    ]))
                                 }}
                             </td>
                         </tr>
@@ -197,35 +189,51 @@
                         </tr>
                         <tr>
                             <td>Niveau</td>
-                            <td>{{ $employee->salaries->category ?? 'N/A' }}</td>
+                            <td>{{ $employee->salaries->category }}</td>
                             <td>Coefficient</td>
-                            <td>{{ number_format($employee->salaries->base_salary ?? 0, 2) }}</td>
+                            <td>{{ number_format($employee->salaries->base_salary,2 ?? 'N/A' ) }}</td>
                         </tr>
                         <tr>
                             <td>Échelon</td>
-                            <td>{{ $employee->salaries->echelon ?? 'N/A' }}</td>
+                            <td>{{ $employee->salaries->echelon }}</td>
                             <td>Taux horaire brut (FC)</td>
                             <td>FC 600</td>
                         </tr>
                         <tr>
                             <td>Salaire mensuel brut</td>
-                            <td>{{ $employee->salaries->currency ?? '' }} {{ number_format($employee->salaries->base_salary ?? 0, 2) }}</td>
+                            <td>{{ $employee->salaries->currency .' ' . number_format ($employee->salaries->base_salary,2 )?? ''}}</td>
                             @php
                                 $currency = $employee->salaries->currency ?? '';
                                 $salary   = $employee->salaries->base_salary ?? 0;
+
                                 $contractType = strtolower($employee->company->contract_type ?? 'full time');
-                                $hoursPerDay = $contractType == 'part time' ? 4 : 8;
+
+                                if($contractType == 'part time'){
+                                    $hoursPerDay = 4;
+                                } else {
+                                    $hoursPerDay = 8; // Full Time
+                                }
+
                                 $daysPerWeek = 5;
                                 $weeksPerMonth = 4;
+
                                 $monthlyHours = $hoursPerDay * $daysPerWeek * $weeksPerMonth;
+
                                 $hourlySalary = $monthlyHours > 0 ? $salary / $monthlyHours : 0;
+                                $dailySalary  = $hourlySalary * $hoursPerDay;
+                                $weeklySalary = $dailySalary * $daysPerWeek;
                             @endphp
-                            <td>Horaire hebdomadaire</td>
-                            <td>{{ $currency }} {{ number_format($hourlySalary, 2) }}</td>
+                            <td>Horaire hebdomadaire </td>
+                            <td>
+                                {{ $currency }} {{ number_format($hourlySalary,2) }}
+                            </td>
                         </tr>
                         <tr>
                             <td>Date d'embauche</td>
-                            <td>{{ Carbon::parse($employee->company->hire_date)->translatedFormat('d F Y') }}</td>
+                            <td>
+                                {{ \Carbon\Carbon::parse($employee->company->hire_date)->translatedFormat('d F Y') }}
+                            </td>
+
                             <td>Numéro matricule</td>
                             <td>{{ $employee->employee_id }}</td>
                         </tr>
@@ -254,6 +262,41 @@
                                 <td colspan="3" class="text-center">Aucun conjoint enregistré</td>
                             @endforelse
                         </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-sm mb-0" style="font-size:10px;">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Prénom</th>
+                                            <th>Date de naissance</th>
+                                            <th>Genre</th>
+                                            <th>Age</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($employee->children as $child)
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td>{{ $child->full_name }}</td>
+                                                @php
+                                                    $age = Carbon::parse($child->date_of_birth)->age;
+                                                @endphp
+                                                <td>{{ $child->gender }}</td>
+                                                <td>
+                                                    {{ $age }} an{{ $age > 1 ? 's' : '' }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d F Y') }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
 
                         <!-- Personne à contacter -->
                         <tr class="table-secondary">
@@ -262,7 +305,7 @@
                         <tr>
                             <td colspan="4">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-sm mb-0" style="font-size:9px;">
+                                    <table class="table table-bordered table-sm mb-0" style="font-size:10px;">
                                         <thead class="table-light">
                                         <tr>
                                             <th>N°</th>
@@ -283,21 +326,23 @@
                                 </div>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="alert alert-warning p-2 mb-3" role="alert" style="font-size:9px;">
+            <div class="alert alert-warning p-2 mb-3" role="alert" style="font-size:10px;">
                 <strong>Attention :</strong>
                 <ul class="mb-0">
-                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.</li>
-                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des salaires.</li>
+                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.
+                    </li>
+                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des
+                        salaires.
+                    </li>
                 </ul>
             </div>
 
-            <div class="row mt-3 text-center" style="font-size:9px;">
+            <div class="row mt-3 text-center" style="font-size:10px;">
                 <div class="col-md-6 mb-2 mb-md-0">
                     <div class="border p-2 signature-box">
                         <p class="fw-bold mb-2">Date et signature du représentant légal de l'entreprise</p>
@@ -314,21 +359,4 @@
 
         </div>
     </div>
-
-    <!-- Scripts pour PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script>
-        document.getElementById("downloadPdfBtn").addEventListener("click", () => {
-            const element = document.querySelector(".fiche");
-            const opt = {
-                margin: 0.4,
-                filename: '{{ $employee->employee_id ?? "fiche-agent" }}.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
-        });
-    </script>
-
 @endsection
