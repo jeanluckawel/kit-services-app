@@ -15,9 +15,10 @@
             background-color: #f8f9fa;
             min-height: 100vh;
         }
-        .page-break-after {
-            page-break-after: always; /* force un saut de page après l'élément */
+        .alert-signatures-wrapper {
+            page-break-inside: avoid;
         }
+
 
 
         .fiche {
@@ -337,29 +338,35 @@
                 </div>
             </div>
 
-            <div class="alert alert-warning p-2 mb-3 page-break-after" role="alert" style="font-size:10px;">
-                <strong>Attention :</strong>
-                <ul class="mb-0">
-                    <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.</li>
-                    <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des salaires.</li>
-                </ul>
-            </div>
+            <div class="alert-signatures-wrapper" style="font-size:10px;">
 
+                <!-- Alerte -->
+                <div class="alert alert-warning p-2 mb-3" role="alert">
+                    <strong>Attention :</strong>
+                    <ul class="mb-0">
+                        <li>Aucun de ceux du salaire ne pourra être établi après retour de cette fiche dûment complétée.</li>
+                        <li>Les champs signalés par un calendrier sont obligatoires pour établir la déclaration annuelle des salaires.</li>
+                    </ul>
+                </div>
 
-            <div class="row mt-3 text-center" style="font-size:10px;">
-                <div class="col-md-6 mb-2 mb-md-0">
-                    <div class="border p-2 signature-box">
-                        <p class="fw-bold mb-2">Date et signature du représentant légal de l'entreprise</p>
-                        <div class="border-top mt-1" style="height:50px;"></div>
+                <!-- Signatures -->
+                <div class="row mt-3 text-center">
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <div class="border p-2 signature-box">
+                            <p class="fw-bold mb-2">Date et signature du représentant légal de l'entreprise</p>
+                            <div class="border-top mt-1" style="height:50px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border p-2 signature-box">
+                            <p class="fw-bold mb-2">Date et signature de l'agent</p>
+                            <div class="border-top mt-1" style="height:50px;"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="border p-2 signature-box">
-                        <p class="fw-bold mb-2">Date et signature de l'agent</p>
-                        <div class="border-top mt-1" style="height:50px;"></div>
-                    </div>
-                </div>
+
             </div>
+
 
         </div>
     </div>
