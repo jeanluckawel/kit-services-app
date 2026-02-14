@@ -197,7 +197,7 @@
                             <td>Échelon</td>
                             <td>{{ $employee->salaries->echelon }}</td>
                             <td>Taux horaire brut (FC)</td>
-                            <td>FC 600</td>
+                            <td>FC 2.200</td>
                         </tr>
                         <tr>
                             <td>Salaire mensuel brut</td>
@@ -283,13 +283,14 @@
                                                 @php
                                                     $age = Carbon::parse($child->date_of_birth)->age;
                                                 @endphp
+                                                <td>
+                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d F Y') }}
+                                                </td>
                                                 <td>{{ $child->gender }}</td>
                                                 <td>
                                                     {{ $age }} an{{ $age > 1 ? 's' : '' }}
                                                 </td>
-                                                <td>
-                                                    {{ Carbon::parse($child->date_of_birth)->translatedFormat('d F Y') }}
-                                                </td>
+
                                             </tr>
                                         @endforeach
                                         </tbody>
