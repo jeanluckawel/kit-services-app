@@ -1,138 +1,220 @@
 @php use Carbon\Carbon; @endphp
 @extends('layoutsddd.app')
 
-@section('title', 'Bulletin de Paie')
+@section('title', 'Bulletin de Paie | Kit Service')
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 @section('content')
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <style>
-        body{font-size:14px;color:#333;}
-        p{margin-bottom:5px;}
-        .section-title{font-weight:600;border-bottom:1px solid #ddd;margin-bottom:8px;padding-bottom:4px;text-transform:uppercase;font-size:14px;}
-        .label{width:160px;display:inline-block;font-weight:600;}
-        .totals-box{background:#f8f9fa;padding:14px;border-radius:6px;}
-        .footer-ref{font-size:12px;color:#777;border-top:1px dashed #ccc;margin-top:30px;padding-top:8px;display:flex;justify-content:space-between;}
-        img{max-height:60px;}
-        /* bouton download */
-        .download-btn{
-            display:inline-block;
-            margin:20px auto;
-            padding:8px 16px;
-            background:#0d6efd;
-            color:#fff;
-            border:none;
-            border-radius:4px;
-            cursor:pointer;
-            font-size:16px;
+        /* Wrapper général */
+        .fiche-wrapper {
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
         }
-        .download-btn:hover{background:#0056b3;}
+
+        /* Fiche principale */
+        .fiche {
+            width: 100%;
+            max-width: 21cm;
+            padding: 1.5cm;
+            font-size: 11px;
+            line-height: 1.4;
+            background-color: #fff;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .header h1 { color: #FF6600; margin: 0; font-size: 1.3rem; }
+        .header h2 { margin: 0; font-size: 1.1rem; color: #555; }
+
+        /* Titres de section */
+        .section-title {
+            font-weight: 600;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #222;
+        }
+
+        /* Flex pour infos */
+        .info-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-item {
+            width: 48%;
+            display: flex;
+            margin-bottom: 4px;
+        }
+
+        .info-item span.label {
+            width: 140px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Totaux */
+        .totals-box {
+            background:#fff3cd;
+            border:1px solid #ffeeba;
+            padding:12px;
+            border-radius:6px;
+            margin-bottom:1rem;
+            font-weight: 600;
+        }
+
+        /* Boutons PDF */
+        .btn-pdf {
+            background-color: #FF6600;
+            border: none;
+            color: #fff;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        .btn-pdf:hover { background-color: #e65c00; }
+
+        /* Signatures */
+        .alert-signatures-wrapper { font-size: 10px; margin-top: 20px; }
+        .signature-box { min-height: 70px; padding: 6px; }
+
+        /* Responsive */
+        @media (max-width:768px){
+            .fiche { font-size: 10px; padding: 1rem; }
+            .info-item { width: 100%; }
+            .header { flex-direction: column; gap: 10px; }
+        }
     </style>
 
-    <!-- BOUTON DOWNLOAD -->
-    <div class="text-center">
-        <button class="download-btn" onclick="downloadPDF()">Télécharger le Bulletin</button>
+    <!-- Boutons PDF -->
+    <div class="mb-3 text-end" style="width: 100%; max-width: 21cm; margin: auto;">
+        <button id="viewPdfBtn" class="btn-pdf"><i class="bi bi-eye"></i> Voir PDF</button>
+        <button id="downloadPdfBtn" class="btn-pdf"><i class="bi bi-download"></i> Télécharger PDF</button>
     </div>
 
-    <!-- BULLETIN -->
-    <div class="container my-3" style="max-width:800px;" id="bulletin-container">
-        <div class="bg-white p-4">
+    <div class="fiche-wrapper">
+        <div class="fiche">
 
             <!-- HEADER -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h4 class="fw-bold mb-0">KIT SERVICE SARL</h4>
-                    <small class="text-muted">Bulletin de Paie</small>
-                </div>
-                <img src="{{ asset('logo/img.png') }}" alt="Logo">
-            </div>
-
-            <!-- EMPLOYE / EMPLOYEUR -->
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="section-title">Informations Employé</div>
-                    <p><span class="label">Matricule</span>: {{ $payroll->employee->employee_id ?? '' }}</p>
-                    <p><span class="label">Nom</span>: {{ $payroll->employee->first_name ?? '' }} {{ $payroll->employee->last_name ?? '' }} {{ $payroll->employee->middle_name ?? '' }}</p>
-                    <p><span class="label">Fonction</span>: {{ $payroll->employee->company->job_title ?? '' }}</p>
-                    <p><span class="label">Département</span>: {{ $payroll->employee->company->department ?? '' }}</p>
-                    <p><span class="label">Date Embauche</span>: {{ $payroll->employee->company->hire_date ? Carbon::parse($payroll->employee->company->hire_date)->format('d/m/Y') : '' }}</p>
-                    <p><span class="label">Point de paie</span>: KAMOA</p>
-                    <p><span class="label">Enfants</span>: {{ $payroll->employee->children->count() ?? 0 }}</p>
-                    <p><span class="label">N° CNSS</span>: ....................</p>
-                </div>
-                <div class="col-md-6">
-                    <div class="section-title">Employeur</div>
-                    <p><span class="label">Raison sociale</span>: Kit Service SARL</p>
-                    <p><span class="label">Adresse</span>: N°1627 B Av. Kamina</p>
-                    <p><span class="label">Quartier</span>: Mutoshi</p>
-                    <p><span class="label">Commune</span>: Manika</p>
-                    <p><span class="label">Ville</span>: Kolwezi</p>
-                    <p><span class="label">Téléphone</span>: 002439773339977</p>
-                    <p><span class="label">CNSS</span>: 050302727C1</p>
+            <div class="header">
+                <h1>Kit Service Sarl</h1>
+                <h2>Bulletin de Paie</h2>
+                <div style="width:150px; height:150px;">
+                    <img src="{{ asset('logo/img.png') }}" alt="Logo" style="width:100%;height:100%;object-fit:contain;">
                 </div>
             </div>
 
-            <!-- SALAIRE -->
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="section-title">Détails Salaire</div>
-                    <p><span class="label">Jours prestés</span>: {{ $payroll->worked_days }}</p>
-                    <p><span class="label">Salaire Brut</span>: {{ $payroll->basic_usd }} $</p>
-                    <p><span class="label">Congé annuel</span>: 0</p>
-                    <p><span class="label">Congé maladie</span>: {{ $payroll->sick_days }}</p>
-                    <p><span class="label">Logement</span>: {{ $payroll->accommodation_allowance }} $</p>
-                </div>
-                <div class="col-md-6">
-                    <div class="section-title">Déductions</div>
-                    <p><span class="label">INSS 5%</span>: {{ $payroll->inss_5 }} CDF</p>
-                    <p><span class="label">IPR</span>: {{ $payroll->ipr_rate }} CDF</p>
+            <!-- Informations Employé / Employeur -->
+            <div class="section-title">Informations Employé / Employeur</div>
+            <div class="info-flex">
+                <div class="info-item"><span class="label">Matricule:</span> {{ $payroll->employee->employee_id ?? '' }}</div>
+                <div class="info-item"><span class="label">Raison sociale:</span> Kit Service SARL</div>
+                <div class="info-item"><span class="label">Nom:</span> {{ $payroll->employee->first_name ?? '' }} {{ $payroll->employee->middle_name ?? '' }} {{ $payroll->employee->last_name ?? '' }}</div>
+                <div class="info-item"><span class="label">Adresse:</span> N°1627 B Av. Kamina</div>
+                <div class="info-item"><span class="label">Fonction:</span> {{ $payroll->employee->company->job_title ?? '---' }}</div>
+                <div class="info-item"><span class="label">Quartier:</span> Mutoshi</div>
+                <div class="info-item"><span class="label">Département:</span> {{ $payroll->employee->company->department ?? '1' }}</div>
+                <div class="info-item"><span class="label">Commune:</span> Manika</div>
+                <div class="info-item"><span class="label">Date Embauche:</span> {{ $payroll->employee->company->hire_date ? Carbon::parse($payroll->employee->company->hire_date)->format('d/m/Y') : '' }}</div>
+                <div class="info-item"><span class="label">Ville:</span> Kolwezi</div>
+                <div class="info-item"><span class="label">Point de paie:</span> KAMOA</div>
+                <div class="info-item"><span class="label">Téléphone:</span> 050302727C1</div>
+                <div class="info-item"><span class="label">Enfants:</span> {{ $payroll->employee->children->count() ?? 1 }}</div>
+                <div class="info-item"><span class="label">N° CNSS:</span> 002439773339977</div>
+            </div>
+
+            <!-- Salaire -->
+            <div class="section-title">Détails Salaire</div>
+            <div class="info-flex">
+                <div class="info-item"><span class="label">Jours prestés:</span> {{ $payroll->worked_days }}</div>
+                <div class="info-item"><span class="label">Salaire Brut:</span> {{ $payroll->basic_usd }} $</div>
+                <div class="info-item"><span class="label">Congé annuel:</span> 0</div>
+                <div class="info-item"><span class="label">Congé maladie:</span> {{ $payroll->sick_days }}</div>
+                <div class="info-item"><span class="label">Logement:</span> {{ $payroll->accommodation_allowance }} $</div>
+            </div>
+
+            <!-- Déductions -->
+            <div class="section-title">Déductions</div>
+            <div class="info-flex">
+                <div class="info-item"><span class="label">INSS 5%:</span> {{ $payroll->inss_5 }} CDF</div>
+                <div class="info-item"><span class="label">IPR:</span> {{ $payroll->ipr_rate }} CDF</div>
+            </div>
+
+            <!-- Totaux -->
+            <div class="totals-box">
+                <div class="info-flex">
+                    <div class="info-item"><span class="label">Total Brut:</span> {{ $payroll->total_brut }} CDF</div>
+                    <div class="info-item"><span class="label">Total Déductions:</span> {{ $payroll->total_deductions }} CDF</div>
+                    <div class="info-item"><span class="label">Net USD:</span> {{ $payroll->net_usd }} $</div>
+                    <div class="info-item"><span class="label">Net CDF:</span> {{ $payroll->net_cdf }} CDF</div>
                 </div>
             </div>
 
-            <!-- TOTALS -->
-            <div class="totals-box mb-4">
-                <div class="row">
+            <!-- Signatures -->
+            <div class="alert-signatures-wrapper">
+                <div class="row text-center mt-3">
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <div class="border p-2 signature-box">
+                            <p class="fw-bold mb-2">Date et signature du représentant légal de l'entreprise</p>
+                            <div class="border-top mt-1" style="height:50px;"></div>
+                        </div>
+                    </div>
                     <div class="col-md-6">
-                        <p><span class="label">Total Brut</span>: {{ $payroll->total_brut }} CDF</p>
-                        <p><span class="label">Total Déductions</span>: {{ $payroll->total_deductions }} CDF</p>
-                    </div>
-                    <div class="col-md-6 fw-bold">
-                        <p><span class="label">Net USD</span>: {{ $payroll->net_usd }} $</p>
-                        <p><span class="label">Net CDF</span>: {{ $payroll->net_cdf }} CDF</p>
+                        <div class="border p-2 signature-box">
+                            <p class="fw-bold mb-2">Date et signature de l'agent</p>
+                            <div class="border-top mt-1" style="height:50px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SIGNATURE -->
-            <div class="text-end mt-5">
-                <p>Signature & Cachet</p>
-                <div style="width:220px;border-top:1px solid #000;margin-left:auto;margin-top:40px;"></div>
-            </div>
-
-            <!-- FOOTER -->
-            <div class="footer-ref">
-                <span>Généré le {{ now()->format('d/m/Y H:i') }}</span>
-                <span>Réf : {{ $payroll->reference }}</span>
+            <div class="text-end mt-2" style="font-size:10px;">
+                Réf : {{ $payroll->reference ?? '---' }} | Généré le {{ now()->format('d/m/Y H:i') }}
             </div>
 
         </div>
     </div>
 
-    <!-- SCRIPT HTML2PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-        function downloadPDF(){
-            const element = document.getElementById('bulletin-container');
-            const opt = {
-                margin:       10,
-                filename:     '{{ $payroll->employee->employee_id ?? 'bulletin' }}.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, logging: false, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
+        const element = document.querySelector(".fiche");
+        const opt = {
+            margin: [0.5,0.5,0.5,0.5],
+            filename: '{{ $payroll->employee->employee_id ?? "bulletin" }}_paie.pdf',
+            image: { type:'jpeg', quality:0.98 },
+            html2canvas:{ scale:2, logging:true, letterRendering:true },
+            jsPDF:{ unit:'cm', format:'a4', orientation:'portrait' }
+        };
 
+        document.getElementById("viewPdfBtn").addEventListener("click", ()=> {
+            html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob){
+                window.open(URL.createObjectURL(pdfBlob), '_blank');
+            });
+        });
+
+        document.getElementById("downloadPdfBtn").addEventListener("click", ()=> {
+            html2pdf().set(opt).from(element).save();
+        });
+    </script>
 @endsection

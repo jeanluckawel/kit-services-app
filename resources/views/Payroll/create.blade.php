@@ -39,9 +39,8 @@
                     <th>Photo</th>
                     <th>Full Name</th>
                     <th>Employee ID</th>
-                    <th>Department</th>
                     <th>Basic USD Salary</th>
-                    <th>Tax Dependants</th>
+                    <th>Dependants</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,7 +58,6 @@
                     </td>
                     <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
                     <td>{{ $employee->employee_id }}</td>
-                    <td>{{ $employee->company->department ?? 'N/A' }}</td>
                     <td>{{ number_format($employee->salaries->base_salary ?? 0, 2) }} {{ $employee->salaries->currency ?? 'USD' }}</td>
                     <td>{{ $employee->children->count() ?? 0 }}</td>
                 </tr>
@@ -133,38 +131,34 @@
                             <!-- Payroll Month -->
                             <p class="mb-2">Du {{ payrollPeriod()['start'] }} au {{ payrollPeriod()['end'] }}</p>
 
-                            @php
-                                $months = [
-                                    1  => 'January',
-                                    2  => 'February',
-                                    3  => 'March',
-                                    4  => 'April',
-                                    5  => 'May',
-                                    6  => 'June',
-                                    7  => 'July',
-                                    8  => 'August',
-                                    9  => 'September',
-                                    10 => 'October',
-                                    11 => 'November',
-                                    12 => 'December',
-                                ];
+                            <label class="form-label fw-bold">
+                                Payroll Month <span class="text-danger">*</span>
+                            </label>
+                            <select name="period" class="form-select border border-orange-500 rounded-sm focus:border-orange-600 focus:ring-1 focus:ring-orange-300" required>
+                                @php
+                                    $months = [
+                                        1  => 'January',
+                                        2  => 'February',
+                                        3  => 'March',
+                                        4  => 'April',
+                                        5  => 'May',
+                                        6  => 'June',
+                                        7  => 'July',
+                                        8  => 'August',
+                                        9  => 'September',
+                                        10 => 'October',
+                                        11 => 'November',
+                                        12 => 'December',
+                                    ];
+                                    $currentPayrollMonth = payrollMonth(); // mois par défaut
+                                @endphp
 
-                                $currentPayrollMonth = payrollMonth();
-                            @endphp
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">
-                                    Payroll Month <span class="text-danger">*</span>
-                                </label>
-
-                                <select name="period" class="form-select border border-orange-500 rounded-sm focus:border-orange-600 focus:ring-1 focus:ring-orange-300" required>
-                                    @foreach($months as $value => $label)
-                                        <option value="{{ $value }}" {{ $currentPayrollMonth == $value ? 'selected' : '' }}>
-                                            {{ $label }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                @foreach($months as $value => $label)
+                                    <option value="{{ $value }}" {{ $currentPayrollMonth == $value ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
 
 
 

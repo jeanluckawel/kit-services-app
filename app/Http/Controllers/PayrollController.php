@@ -44,6 +44,9 @@ class PayrollController extends Controller
             'overtime_30'   => 'nullable|numeric|min:0',
             'overtime_60'   => 'nullable|numeric|min:0',
             'overtime_100'  => 'nullable|numeric|min:0',
+
+            'period'        => 'required|integer|min:1|max:12',
+            'year'          => 'nullable|integer|min:2000|max:2100',
         ]);
 
 
@@ -166,19 +169,25 @@ class PayrollController extends Controller
 //  year payroll
         $year = date('Y');
 
-        $period = payrollPeriod();
-        $start_date = $period['start'];
-        $end_date   = $period['end'];
+        $employee = Employee::findOrFail($employeeId);
+
+
+        $month = $validated['period'];
+        $year  = $validated['year'] ?? date('Y');
+
+
+        $start_date = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $end_date   = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
 
         $exist = Payroll::where('employee_id', $employee->employee_id)
-            ->where('start_date',$start_date )
-            ->where('end_date',$end_date)
+            ->whereMonth('start_date', $month)
+            ->whereYear('start_date', $year)
             ->exists();
 
         if($exist) {
-            return redirect()->back()->with('error', 'Payroll already exists for this period');
+            return redirect()->back()->with('error', 'Payroll already exists for this month');
         }
-
 
 
 

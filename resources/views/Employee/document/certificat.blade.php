@@ -5,7 +5,22 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 @section('content')
-    <div class="flex justify-center mt-6">
+    <div class="flex justify-center mt-6 flex-col items-center">
+
+        <!-- ================= BUTTONS ================= -->
+        <div class="mb-4 text-center">
+            <button id="viewPdfBtn"
+                    class="px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-700">
+                Voir PDF
+            </button>
+
+            <button id="downloadPdfBtn"
+                    class="px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 ml-2">
+                Télécharger PDF
+            </button>
+        </div>
+
+        <!-- ================= CERTIFICAT ================= -->
         <div id="certificate"
              class="relative bg-[#fffdf5] border-8 border-orange-500 rounded-xl shadow-inner w-[90%] h-[80vh] p-12 overflow-hidden font-serif">
 
@@ -55,8 +70,6 @@
 
                 $jobTitle = $employee->company->job_title ?? 'Poste';
                 $firstLetter = mb_strtoupper(mb_substr($jobTitle, 0, 1, 'UTF-8'));
-
-
                 $preposition = in_array($firstLetter, ['A','E','I','O','U','Y']) ? "d’" : "de ";
             @endphp
 
@@ -68,8 +81,8 @@
                 </p>
                 <p class="text-lg">
                     {{ $employee->gender === 'F' ? 'A été employée' : 'A été employé' }}
-                    au sein de notre entreprise du <strong>{{ $hireDate ?? 'JJ-MM-AAAA' }}</strong>
-                    au <strong>{{ $endDate?? 'JJ-MM-AAAA' }}</strong>, en qualité {{ $preposition }}<strong>{{ $jobTitle }}</strong>
+                    au sein de notre entreprise du <strong>{{ $hireDate }}</strong>
+                    au <strong>{{ $endDate }}</strong>, en qualité {{ $preposition }}<strong>{{ $jobTitle }}</strong>
                 </p>
                 <p class="text-lg">
                     Pendant toute la durée de son contrat, {{$title}} <strong>{{ $employee->first_name ?? 'Nom' }}</strong>
@@ -84,25 +97,19 @@
             <div class="border-t-2 mt-6 border-orange-500 w-2/3 mx-auto"></div>
 
             <!-- Footer -->
-            <div class="absolute bottom-19 w-[calc(100%-6rem)]">
-
+            <div class="absolute bottom-12 w-[calc(100%-6rem)]">
                 <div class="flex justify-between mt-4 items-center">
                     <!-- Human Resources -->
                     <div class="text-center">
                         <p class="font-bold text-gray-700 uppercase">HUMAN RESOURCES</p>
-                        <p class="text-gray-600"></p>
                     </div>
 
                     <!-- Logo + Timbre -->
-                    <!-- Logo + timbre -->
                     <div class="text-center relative">
-                        <!-- Logo principal -->
                         <img src="{{ asset('logo/img.png') }}" alt="Logo" class="h-16 mx-auto relative z-10">
-
-                        <!-- Timbre centré et proportionnel -->
                         <img src="{{ asset('logo/trimbre.png') }}" alt="Timbre"
                              class="absolute top-1/2 left-1/2 z-0 opacity-30"
-                             style="max-height: 200px; max-width: 200px; width: auto; height: auto; transform: translate(-50%, -50%);">
+                             style="max-height: 200px; max-width: 200px; transform: translate(-50%, -50%);">
                     </div>
 
                     <!-- Manager -->
@@ -116,26 +123,27 @@
         </div>
     </div>
 
-    <!-- Bouton Télécharger PDF -->
-    <div class="mt-4 text-center">
-        <button onclick="downloadPDF()"
-                class="px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-700">
-            Télécharger PDF
-        </button>
-    </div>
-
+    <!-- ================= PDF SCRIPT ================= -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-        function downloadPDF() {
-            const element = document.getElementById('certificate');
-            const opt = {
-                margin: 0,
-                filename: 'certificat_{{ $employee->first_name ?? "employee" }}.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, scrollY: -window.scrollY }, // centrer l'élément
-                jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
+        const element = document.getElementById('certificate');
+
+        const options = {
+            margin: 0,
+            filename: 'certificat_{{ $employee->first_name ?? "employee" }}.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { scale: 1, scrollY: 0 }, // 🔴 scale 1 = 1 page
+            jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' },
+            pagebreak: { mode: ['avoid-all'] }     // empêche 2 pages
+        };
+
+        document.getElementById("viewPdfBtn").addEventListener("click", () => {
+            html2pdf().set(options).from(element).outputPdf('blob')
+                .then(pdf => window.open(URL.createObjectURL(pdf), '_blank'));
+        });
+
+        document.getElementById("downloadPdfBtn").addEventListener("click", () => {
+            html2pdf().set(options).from(element).save();
+        });
     </script>
 @endsection

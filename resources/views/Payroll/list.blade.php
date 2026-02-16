@@ -41,15 +41,14 @@
                     <tr>
                         <th>#</th>
                         <th>Employee</th>
-                        <th>Department</th>
-                        <th>Age</th>
+                        <th>Department/Fonction</th>
                         <th>Salary</th>
-                        <th>Hire Date</th>
-                        <th>Contract</th>
+                        <th>Paid</th>
                         <th class="text-center">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
+
                     @foreach($employees as $employee)
                         <tr>
                             <td>{{ $loop->iteration + ($employees->currentPage()-1) * $employees->perPage() }}</td>
@@ -76,41 +75,17 @@
                                 </div>
                             </td>
 
-                            <td>{{ $employee->company->department ?? 'N/A' }}</td>
-                            <td>{{ $employee->age >= 1 ? $employee->age . ' ' . ($employee->age > 1 ? 'ans' : 'an') : '-' }}</td>
-                            <td><strong>{{ number_format($employee->salaries->base_salary ?? 0,2) }}</strong></td>
-                            <td>{{ $employee->company->hire_date ?? 'N/A' }}</td>
-
-                            <td>
-                                @php
-                                    $type = $employee->company->contract_type ?? '';
-                                    $endDate = $employee->company->end_contract_date ?? null;
-                                @endphp
-
-                                @if(strtoupper($type) === 'CDD')
-                                    <span class="badge" style="background-color: #ff7f00; color:white;">
-                            {{ $type }}
-                                        @if($endDate)
-                                            ({{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }})
-                                        @endif
-                        </span>
-                                @elseif(strtoupper($type) === 'CDI')
-                                    <span class="badge" style="background-color: #dc3545; color:white;">{{ $type }}</span>
-                                @else
-                                    <span>{{ $type }}</span>
-                                @endif
+                            <td>{{ $employee->company->departmentRelation->name ?? 'N/A' }} <br>
+                                {{ $employee->company->jobTitleRelation->name ?? 'N/A' }}
                             </td>
+                            <td><strong>{{ number_format($employee->salaries->base_salary ?? 0,2) }}</strong></td>
+                            <td>
+
+                            </td>
+
+
                             <td class="text-center">
                                 <div class="d-inline-flex gap-1">
-
-                                    @can('employee_view')
-                                        <a href="{{ route('employee.view', $employee->id) }}"
-                                           class="btn btn-sm btn-outline-primary"
-                                           title="View">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                    @endcan
-
                                     @can('payroll_create')
                                         <a href="{{ route('payroll.create', $employee->id) }}"
                                            class="btn btn-sm btn-outline-success"

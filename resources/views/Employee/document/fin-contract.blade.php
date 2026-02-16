@@ -1,58 +1,95 @@
+@php use Carbon\Carbon; @endphp
 @extends('layoutsddd.app')
 
-@section('title', 'Notification de fin de contrat')
+@section('title', 'Notification de fin de contrat | Kit Service')
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 @section('content')
 
-    <div class="container my-4">
+    <style>
+        body{
+            background:#f8f9fa;
+        }
 
-        <!-- ================= DOCUMENT ================= -->
-        <div id="end-contract"
-             class="bg-white shadow rounded mx-auto"
-             style="padding:1.5cm; font-size:13px; width:21cm; height:29.7cm;">
+        .doc-wrapper{
+            display:flex;
+            justify-content:center;
+            padding:20px;
+            min-height:100vh;
+        }
 
-            <style>
-                /* Empêche coupure */
-                #end-contract{
-                    page-break-inside: avoid;
-                    break-inside: avoid;
-                    overflow: hidden;
-                }
+        #end-contract{
+            width:21cm;
+            min-height:29.7cm;
+            background:#fff;
+            padding:1.5cm;
+            font-size:13px;
+            box-shadow:0 0.5rem 1rem rgba(0,0,0,.1);
+            color:#333;
+            page-break-inside:avoid;
+        }
 
-                /* Cache boutons dans PDF */
-                .no-print{
-                    display:none !important;
-                }
+        .btn-pdf{
+            background:#FF6600;
+            color:#fff;
+            border:none;
+            padding:6px 12px;
+            border-radius:4px;
+            font-size:14px;
+            cursor:pointer;
+        }
+        .btn-pdf:hover{ background:#e65c00; }
 
-                @media print{
-                    body{
-                        margin:0;
-                        padding:0;
-                    }
-                }
-            </style>
+        /* TELEPHONE SUR UNE SEULE LIGNE */
+        .nowrap{
+            white-space:nowrap;
+            word-break:keep-all;
+        }
+
+        @media print{
+            body{ margin:0; padding:0; }
+            .no-print{ display:none!important; }
+        }
+    </style>
+
+    <!-- ================= BUTTONS ================= -->
+    <div class="mb-3 text-end no-print" style="max-width:21cm;margin:auto;">
+        <button id="viewPdfBtn" class="btn-pdf">
+            <i class="bi bi-eye"></i> Voir PDF
+        </button>
+
+        <button id="downloadPdfBtn" class="btn-pdf ms-2">
+            <i class="bi bi-download"></i> Télécharger PDF
+        </button>
+    </div>
+
+    <!-- ================= DOCUMENT ================= -->
+    <div class="doc-wrapper">
+        <div id="end-contract">
 
             <!-- HEADER -->
             <div class="row border-bottom pb-2 mb-4 align-items-center">
                 <div class="col-8">
-                    <h4 class="fw-bold text-warning mb-1">KIT SERVICE Sarl</h4>
+                    <h4 class="fw-bold mb-1" style="color: orangered">KIT SERVICE Sarl</h4>
                     <small class="text-muted">
-                        Lualaba, Kolwezi, Avenue Kamina n°1627B, Commune de Manika <br>
+                        Lualaba, Kolwezi, Avenue Kamina n°1627B<br>
                         Email : kitservice17@gmail.com
                     </small>
                 </div>
-
                 <div class="col-4 text-end">
-                    <img src="{{ asset('logo/img.png') }}" height="70">
+                    <img src="{{ asset('logo/img.png') }}" height="70" alt="logo kit services">
                 </div>
             </div>
 
             <!-- EMPLOYEE INFO -->
             <p class="fw-bold mb-1">
-                {{ $employee->first_name }} {{ $employee->last_name }} {{ $employee->middle_name }}
+                {{ $employee->first_name }}
+                {{ $employee->middle_name }}
+                {{ $employee->last_name }}
             </p>
 
-            <p><strong>Employee ID :</strong> {{ $employee->employee_id ?? 'N/A' }}</p>
+            <p><strong>Matricule :</strong> {{ $employee->employee_id }}</p>
 
             <p>
                 <strong>Adresse :</strong>
@@ -61,7 +98,11 @@
                 {{ $employee->city ?? '' }}
             </p>
 
-            <p><strong>Téléphone :</strong> {{ $employee->address->phone ?? 'N/A' }}</p>
+            <!-- TELEPHONE (UNE LIGNE) -->
+            <p class="nowrap">
+                <strong>Téléphone :</strong>
+                {{ $employee->address->phone ?? 'N/A' }}
+            </p>
 
             <!-- TITLE -->
             <h5 class="text-center fw-bold my-4 text-uppercase border-bottom pb-2">
@@ -69,9 +110,8 @@
             </h5>
 
             @php
-                if ($employee->gender === 'Male') $salutation = 'Cher';
-                elseif ($employee->gender === 'Female') $salutation = 'Chère';
-                else $salutation = 'Cher(e)';
+                $salutation = $employee->gender === 'Male' ? 'Cher' :
+                              ($employee->gender === 'Female' ? 'Chère' : 'Cher(e)');
             @endphp
 
                 <!-- BODY -->
@@ -79,43 +119,39 @@
 
             <p>
                 Conformément au contrat de travail à durée déterminée signé le
-                <strong>{{ \Carbon\Carbon::parse($employee->created_at)->translatedFormat('d F Y') }}</strong>,
+                <strong>{{ Carbon::parse($employee->created_at)->translatedFormat('d F Y') }}</strong>,
                 arrivé à échéance le
-                <strong>{{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}</strong>,
+                <strong>{{ Carbon::parse($endDate)->translatedFormat('d F Y') }}</strong>,
                 nous vous notifions que votre contrat prendra fin à cette date,
                 conformément au Code du Travail de la RDC.
             </p>
 
-            <p>Nous vous remercions pour les services rendus au sein de <strong>KIT SERVICE Sarl</strong>.</p>
-
-            <p>Nous vous invitons à contacter les Ressources Humaines pour les formalités de sortie et la remise des biens.</p>
-
-            <p>En vous souhaitant plein succès dans vos projets futurs,</p>
-
-            <p class="mb-5">
-                Veuillez agréer, Madame/Monsieur, l’expression de nos salutations distinguées.
+            <p>
+                Nous vous remercions pour les services rendus au sein de
+                <strong>KIT SERVICE Sarl</strong>.
             </p>
 
+            <p>
+                Nous vous invitons à contacter les Ressources Humaines pour les formalités
+                de sortie et la remise des biens.
+            </p>
+
+            <p>Veuillez agréer, Madame/Monsieur, l’expression de nos salutations distinguées.</p>
+
             <!-- SIGNATURE -->
-            <div class="text-end mb-5">
+            <div class="text-end mt-5">
                 <p class="fw-bold mb-0">Madame KUZO Nelly</p>
-                <small>MANAGER Général</small>
+                <small>Manager Général</small>
             </div>
 
             <hr>
 
+            <!-- ACKNOWLEDGEMENT -->
             <h6 class="text-center fw-bold mt-4">
                 ACCUSÉ DE RÉCEPTION PAR LE TRAVAILLEUR
             </h6>
 
-            <div class="form-check my-3">
-                <input class="form-check-input" type="checkbox">
-                <label class="form-check-label">
-                    J’accuse réception de la présente lettre.
-                </label>
-            </div>
-
-            <p>Le <strong>{{ now()->translatedFormat('d F Y') }}</strong></p>
+            <p>Le {{ now()->translatedFormat('d F Y') }}</p>
 
             <p>
                 Nom complet :
@@ -133,43 +169,30 @@
             </p>
 
         </div>
-        <!-- ================= END DOCUMENT ================= -->
-
-        <!-- BUTTONS -->
-        <div class="mt-4 d-flex gap-2 justify-content-center no-print">
-            <a href="{{ route('employee.list') }}" class="btn btn-danger btn-sm">
-                Retour
-            </a>
-
-            <button onclick="downloadPDF()" class="btn btn-dark btn-sm">
-                Télécharger PDF
-            </button>
-        </div>
-
     </div>
 
-    <!-- PDF LIB -->
+    <!-- ================= PDF SCRIPT ================= -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
-        function downloadPDF(){
+        const element = document.getElementById("end-contract");
 
-            const element = document.body;
+        const opt = {
+            margin:[0.5,0.5,0.5,0.5],
+            filename:"fin_contrat_{{ $employee->employee_id }}.pdf",
+            image:{ type:'jpeg', quality:0.98 },
+            html2canvas:{ scale:2 },
+            jsPDF:{ unit:'cm', format:'a4', orientation:'portrait' }
+        };
 
-            html2pdf().set({
-                margin: 0,
-                filename: "fin_contrat_{{ $employee->first_name }}.pdf",
-                image: { type: "jpeg", quality: 0.98 },
-                html2canvas: {
-                    scale: 2,
-                    windowWidth: document.body.scrollWidth
-                },
-                jsPDF: { unit: "cm", format: "a4", orientation: "portrait" },
-                pagebreak: { mode: ['avoid-all'] }
-            })
-                .from(element)
-                .save();
-        }
+        document.getElementById("viewPdfBtn").addEventListener("click", ()=>{
+            html2pdf().set(opt).from(element).outputPdf('blob')
+                .then(pdf => window.open(URL.createObjectURL(pdf),'_blank'));
+        });
+
+        document.getElementById("downloadPdfBtn").addEventListener("click", ()=>{
+            html2pdf().set(opt).from(element).save();
+        });
     </script>
 
 @endsection
