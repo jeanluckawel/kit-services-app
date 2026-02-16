@@ -92,7 +92,7 @@
                                 </div>
                             </td>
 
-                            <td>{{ $employee->company->department ?? 'N/A' }}</td>
+                            <td>{{ $employee->company->departmentRelation->name ?? 'N/A' }}</td>
 
                             <td>
                                 {{ $employee->age }}ans
