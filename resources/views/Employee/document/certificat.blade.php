@@ -68,7 +68,7 @@
                             ? Carbon::parse($employee->company->end_contract_date)->locale('fr')->translatedFormat('d F Y')
                             : 'JJ-MM-AAAA';
 
-                $jobTitle = $employee->company->job_title ?? 'Poste';
+                $jobTitle = $employee->company->jobTitleRelation->name ?? 'Poste';
                 $firstLetter = mb_strtoupper(mb_substr($jobTitle, 0, 1, 'UTF-8'));
                 $preposition = in_array($firstLetter, ['A','E','I','O','U','Y']) ? "d’" : "de ";
             @endphp
