@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->integer('period')->nullable();
 
-            $table->integer('year')->after('period')->default(now()->year);
+            $table->integer('year')->default(now()->year);
 
 
             $table->integer('day_sick')->default(0);
