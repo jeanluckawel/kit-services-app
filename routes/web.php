@@ -13,6 +13,7 @@ use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PerceptionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuickPayController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
@@ -277,6 +278,29 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/notifications', [DashboardController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
         ->name('notifications.read');
+
+
+    Route::get('quick-pay',[QuickPayController::class,'index'])->name('quick_pay');
+//    Route::get('quick-list',[QuickPayController::class,'list'])->name('quick_list');
+    Route::post('/quick-pay/store', [QuickPayController::class, 'store'])
+        ->name('quick-pay.store');
+
+    Route::prefix('quick-pay')->name('quick-pay.')->group(function() {
+        Route::get('/list', [QuickPayController::class, 'list'])->name('list');
+        Route::get('/search', [QuickPayController::class, 'search'])->name('employees.search');
+    });
+    Route::get('/ajax/employees-not-paid', [QuickPayController::class, 'getEmployeesNotPaid'])
+        ->name('ajax.employeesNotPaid');
+    Route::post('/quick-pay/store', [QuickPayController::class, 'store'])->name('quick-pay.store');
+    Route::get('/quick-pay/bulletin/{id}', [QuickPayController::class, 'bulletin'])
+        ->name('quick-pay.bulletin');
+    Route::get('/ajax/employee/{employee_id}', [QuickPayController::class, 'getEmployee']);
+
+
+        Route::get('/list/ajax', [QuickPayController::class, 'listAjax'])->name('list.ajax'); // <-- pour AJAX
+    Route::get('/quick-pay/list-ajax', [QuickPayController::class, 'listAjax'])
+        ->name('quick_pay.list.ajax');
+
 
 
 

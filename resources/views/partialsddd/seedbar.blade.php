@@ -83,6 +83,22 @@
                 @endcan
             @endcanany
 
+
+                    <li class="nav-item">
+                        <a href="{{ route('quick_pay') }}" class="nav-link">
+                            <i class="nav-icon bi bi-folder-fill text-success"></i>
+                            <p>Quick Pay</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('quick-pay.list') }}" class="nav-link">
+                            <i class="nav-icon bi bi-folder-fill text-success"></i>
+                            <p>Quick List</p>
+                        </a>
+                    </li>
+
+
 {{--            @canany(['payroll_list','payroll_history','payroll_export_view'])--}}
 {{--                <li class="nav-header">Payrolls</li>--}}
 

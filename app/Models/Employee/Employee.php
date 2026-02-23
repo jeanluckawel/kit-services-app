@@ -3,6 +3,7 @@
 namespace App\Models\Employee;
 
 use App\Models\Payroll;
+use App\Models\QuickPay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -58,6 +59,16 @@ class Employee extends Model
     {
         return $this->hasMany(Payroll::class, 'employee_id','employee_id');
     }
-    
-    
+
+//    public function quick_pay(): HasMany
+//    {
+//        return $this->hasMany(QuickPay::class, 'employee_id','employee_id');
+//    }
+
+    public function quickPays()
+    {
+        return $this->hasMany(QuickPay::class, 'employee_id', 'employee_id');
+    }
+
+
 }
