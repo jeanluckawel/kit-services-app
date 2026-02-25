@@ -1,6 +1,6 @@
 @extends('layoutsddd.app')
 
-@section('title', 'Quick Pay - KIT SERVICES')
+@section('title', 'Pay - KIT SERVICES')
 
 @section('content')
 
@@ -136,7 +136,7 @@
                 <!-- Actions -->
                 <div class="mt-4 text-end">
                     <button class="btn btn-primary">
-                        <i class="bi bi-save me-1"></i> Save Quick Pay
+                        <i class="bi bi-save me-1"></i> Save
                     </button>
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
                 </div>

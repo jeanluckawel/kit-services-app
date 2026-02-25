@@ -189,6 +189,8 @@ class QuickPayController extends Controller
             'employee.salaries',
         ])->findOrFail($id);
 
+        $employee = $payroll->employee;
+
         // Calculs simples
         $work     = $payroll->work;
         $sick     = $payroll->sick;
@@ -201,6 +203,7 @@ class QuickPayController extends Controller
         return view('Payroll.quick_pays.bulletin', compact(
             'payroll',
             'total_brut',
+            'employee',
             'net_usd',
             'net_cdf'
         ));
