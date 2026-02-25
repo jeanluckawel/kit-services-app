@@ -126,8 +126,11 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $address->emergency_phone ?? '',
 
             // Company
-            $company->job_title ?? '',
-            $company->department ?? '',
+//            $company->job_title ?? '',
+            $employee->company?->jobTitleRelation?->name ?? '' ,
+            $employee->company?->DepartmentRelation?->name ?? '' ,
+//            $company->department ?? '',
+
             $company->section ?? '',
             $company->contract_type ?? '',
             $company->hire_date ?? '',
