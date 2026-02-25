@@ -87,7 +87,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('quick_pay') }}" class="nav-link">
-                        <i class="nav-icon bi bi-plus-circle-fill text-success"></i>
+                        <i class="nav-icon bi bi-plus-circle-fill text-primary"></i>
                         <p>Create Payroll</p>
                     </a>
                 </li>
@@ -131,116 +131,116 @@
 {{--                @endcan--}}
 {{--            @endcanany--}}
 
-{{--            @canany(['expense_type','expense_create','expense_list','expense_history'])--}}
-{{--                <li class="nav-header">Expenses</li>--}}
+            @canany(['expense_type','expense_create','expense_list','expense_history'])
+                <li class="nav-header">Expenses</li>
 
-{{--                @can('expense_type')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('expense-types.index') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-tags text-danger"></i>--}}
-{{--                            <p>Expense Types</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('expense_type')
+                    <li class="nav-item">
+                        <a href="{{ route('expense-types.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-tags text-danger"></i>
+                            <p>Expense Types</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('expense_create')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('expense-types.create') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-plus-circle text-danger"></i>--}}
-{{--                            <p>Create Expense</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('expense_create')
+                    <li class="nav-item">
+                        <a href="{{ route('expense-types.create') }}" class="nav-link">
+                            <i class="nav-icon bi bi-plus-circle text-danger"></i>
+                            <p>Create Expense</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('expense_list')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('expenses.create') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-list-ul text-danger"></i>--}}
-{{--                            <p>New Expense</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('expense_list')
+                    <li class="nav-item">
+                        <a href="{{ route('expenses.create') }}" class="nav-link">
+                            <i class="nav-icon bi bi-list-ul text-danger"></i>
+                            <p>New Expense</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('expense_history')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('expenses.history') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-clock-history text-danger"></i>--}}
-{{--                            <p>Expense History</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
-{{--            @endcanany--}}
+                @can('expense_history')
+                    <li class="nav-item">
+                        <a href="{{ route('expenses.history') }}" class="nav-link">
+                            <i class="nav-icon bi bi-clock-history text-danger"></i>
+                            <p>Expense History</p>
+                        </a>
+                    </li>
+                @endcan
+            @endcanany
 
-{{--            @canany(['perception_create','perception_history','perception_list'])--}}
-{{--                <li class="nav-header">Perceptions</li>--}}
+            @canany(['perception_create','perception_history','perception_list'])
+                <li class="nav-header">Perceptions</li>
 
-{{--                @can('perception_create')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('perceptions.create') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-cash-coin text-orange"></i>--}}
-{{--                            <p>Add Perception</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('perception_create')
+                    <li class="nav-item">
+                        <a href="{{ route('perceptions.create') }}" class="nav-link">
+                            <i class="nav-icon bi bi-cash-coin text-orange"></i>
+                            <p>Add Perception</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('perception_list')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('perceptions.index') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-card-list text-orange"></i>--}}
-{{--                            <p>Perception List</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('perception_list')
+                    <li class="nav-item">
+                        <a href="{{ route('perceptions.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-card-list text-orange"></i>
+                            <p>Perception List</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('perception_history')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('perceptions.history') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-clock-history text-orange"></i>--}}
-{{--                            <p>Perception History</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
-{{--            @endcanany--}}
+                @can('perception_history')
+                    <li class="nav-item">
+                        <a href="{{ route('perceptions.history') }}" class="nav-link">
+                            <i class="nav-icon bi bi-clock-history text-orange"></i>
+                            <p>Perception History</p>
+                        </a>
+                    </li>
+                @endcan
+            @endcanany
 
-{{--            @canany(['user_list','user_create','role_list','role_create'])--}}
-{{--                <li class="nav-header">Configuration</li>--}}
+            @canany(['user_list','user_create','role_list','role_create'])
+                <li class="nav-header">Configuration</li>
 
-{{--                @can('user_list')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('users.index') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-people text-secondary"></i>--}}
-{{--                            <p>All Users</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('user_list')
+                    <li class="nav-item">
+                        <a href="{{ route('users.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-people text-secondary"></i>
+                            <p>All Users</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('user_create')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('users.create') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-person-plus text-secondary"></i>--}}
-{{--                            <p>Create User</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('user_create')
+                    <li class="nav-item">
+                        <a href="{{ route('users.create') }}" class="nav-link">
+                            <i class="nav-icon bi bi-person-plus text-secondary"></i>
+                            <p>Create User</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('role_list')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('roles.index') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-shield-lock text-secondary"></i>--}}
-{{--                            <p>All Roles</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
+                @can('role_list')
+                    <li class="nav-item">
+                        <a href="{{ route('roles.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-shield-lock text-secondary"></i>
+                            <p>All Roles</p>
+                        </a>
+                    </li>
+                @endcan
 
-{{--                @can('role_create')--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route('roles.create') }}" class="nav-link">--}}
-{{--                            <i class="nav-icon bi bi-file-plus text-secondary"></i>--}}
-{{--                            <p>Create Role</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
-{{--            @endcanany--}}
+                @can('role_create')
+                    <li class="nav-item">
+                        <a href="{{ route('roles.create') }}" class="nav-link">
+                            <i class="nav-icon bi bi-file-plus text-secondary"></i>
+                            <p>Create Role</p>
+                        </a>
+                    </li>
+                @endcan
+            @endcanany
 
         </ul>
     </nav>
