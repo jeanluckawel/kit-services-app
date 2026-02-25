@@ -206,6 +206,7 @@ class QuickPayController extends Controller
             'employee',
             'net_usd',
             'net_cdf'
+
         ));
     }
 
