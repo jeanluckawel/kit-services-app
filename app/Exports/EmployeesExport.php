@@ -9,7 +9,11 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class EmployeesExport implements FromCollection, WithHeadings, WithMapping, WithColumnFormatting
+class EmployeesExport implements
+    FromCollection,
+    WithHeadings,
+    WithMapping,
+    WithColumnFormatting
 {
     protected $filters;
 
@@ -19,7 +23,7 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping, With
     }
 
     /**
-     * Récupération des employés avec filtres & relations
+     * Récupération des employés avec filtres
      */
     public function collection()
     {
@@ -38,10 +42,8 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping, With
         }
 
         if (!empty($this->filters['contract_type'])) {
-            $contractType = $this->filters['contract_type'];
-
-            $query->whereHas('company', function ($q) use ($contractType) {
-                $q->where('contract_type', $contractType);
+            $query->whereHas('company', function ($q) {
+                $q->where('contract_type', request('contract_type'));
             });
         }
 
@@ -91,7 +93,7 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping, With
     }
 
     /**
-     * Mapping ligne Excel
+     * Mapping Excel (FORCÉ TEXTE)
      */
     public function map($employee): array
     {
@@ -108,23 +110,24 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping, With
             ->first();
 
         return [
-            $employee->employee_id,
+            // 🔒 IDs aussi protégés
+            "'" . $employee->employee_id,
             $employee->first_name,
             $employee->last_name,
             $employee->middle_name,
             $employee->gender,
             $employee->date_of_birth,
-            $employee->number_card,
+            "'" . ($employee->number_card ?? ''),
             $employee->pays,
             $employee->marital_status,
 
             // Address
-            $address->number ?? '',
+            "'" . ($address->number ?? ''),
             $address->city ?? '',
             $address->province ?? '',
-            $address->phone ?? '',
+            "'" . ($address->phone ?? ''),
             $address->email ?? '',
-            $address->emergency_phone ?? '',
+            "'" . ($address->emergency_phone ?? ''),
 
             // Company
             $employee->company?->jobTitleRelation?->name ?? '',
@@ -149,11 +152,14 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping, With
     }
 
     /**
-     *  Forcer les colonnes téléphone en TEXTE (Excel)
+     * 🔐 Forcer les colonnes en TEXTE (double sécurité)
      */
     public function columnFormats(): array
     {
         return [
+            'A' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_TEXT,
             'M' => NumberFormat::FORMAT_TEXT,
             'O' => NumberFormat::FORMAT_TEXT,
         ];
