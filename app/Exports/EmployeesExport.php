@@ -6,8 +6,10 @@ use App\Models\Employee\Employee;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class EmployeesExport implements FromCollection, WithHeadings, WithMapping
+class EmployeesExport implements FromCollection, WithHeadings, WithMapping, WithColumnFormatting
 {
     protected $filters;
 
@@ -17,13 +19,14 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
     }
 
     /**
-     * Récupération des employés avec relations
+     * Récupération des employés avec filtres & relations
      */
     public function collection()
     {
         $query = Employee::with([
             'address',
-            'company',
+            'company.jobTitleRelation',
+            'company.DepartmentRelation',
             'children',
             'dependants',
             'emergencies',
@@ -41,7 +44,6 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
                 $q->where('contract_type', $contractType);
             });
         }
-
 
         if (isset($this->filters['status']) && $this->filters['status'] !== '') {
             $query->where('status', $this->filters['status']);
@@ -93,7 +95,6 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
      */
     public function map($employee): array
     {
-        // 🔐 Sécurisation : on filtre par employee_id
         $address = $employee->address
             ->where('employee_id', $employee->employee_id)
             ->first();
@@ -126,11 +127,8 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
             $address->emergency_phone ?? '',
 
             // Company
-//            $company->job_title ?? '',
-            $employee->company?->jobTitleRelation?->name ?? '' ,
-            $employee->company?->DepartmentRelation?->name ?? '' ,
-//            $company->department ?? '',
-
+            $employee->company?->jobTitleRelation?->name ?? '',
+            $employee->company?->DepartmentRelation?->name ?? '',
             $company->section ?? '',
             $company->contract_type ?? '',
             $company->hire_date ?? '',
@@ -147,6 +145,17 @@ class EmployeesExport implements FromCollection, WithHeadings, WithMapping
 
             // Status
             $employee->status ?? '',
+        ];
+    }
+
+    /**
+     *  Forcer les colonnes téléphone en TEXTE (Excel)
+     */
+    public function columnFormats(): array
+    {
+        return [
+            'M' => NumberFormat::FORMAT_TEXT,
+            'O' => NumberFormat::FORMAT_TEXT,
         ];
     }
 }
