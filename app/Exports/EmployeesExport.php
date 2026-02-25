@@ -132,6 +132,7 @@ class EmployeesExport implements
             // Company
             $employee->company?->jobTitleRelation?->name ?? '',
             $employee->company?->DepartmentRelation?->name ?? '',
+            $employee->company?->sectionRelation?->name ?? '',
             $company->section ?? '',
             $company->contract_type ?? '',
             $company->hire_date ?? '',
