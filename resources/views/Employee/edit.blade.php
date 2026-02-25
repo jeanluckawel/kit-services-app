@@ -612,10 +612,19 @@
                             {{-- Category --}}
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Category</label>
-                                <select name="salary_category" class="form-select"
+                                <select id="categoryEditSelect"
+                                        name="salary_category"
+                                        class="form-select"
                                         style="border-radius:0; color:#ff6600;">
                                     <option value="">Select Category</option>
-                                    @foreach(['A1','A2','A3','B1','B2','C1','C2'] as $cat)
+
+                                    @foreach([
+                                        'A1','A2','A3',
+                                        'B1','B2','B3','B4','B5',
+                                        'C1','C2','C3','C4','C5',
+                                        'D1','D2','D3','D4','D5',
+                                        'E1','E2','E3'
+                                    ] as $cat)
                                         <option value="{{ $cat }}"
                                             {{ old('salary_category', $employee->salaries?->category) == $cat ? 'selected' : '' }}>
                                             {{ $cat }}
@@ -627,17 +636,54 @@
                             {{-- Echelon --}}
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Echelon</label>
-                                <select name="salary_echelon" class="form-select"
-                                        style="border-radius:0; color:#ff6600;">
-                                    <option value="">Select Echelon</option>
-                                    @foreach(['I','II','III','IV','V'] as $echelon)
-                                        <option value="{{ $echelon }}"
-                                            {{ old('salary_echelon', $employee->salaries?->echelon) == $echelon ? 'selected' : '' }}>
-                                            {{ $echelon }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="text"
+                                       id="echelonEditInput"
+                                       name="salary_echelon"
+                                       class="form-control"
+                                       style="border-radius:0; color:#ff6600;"
+                                       value="{{ old('salary_echelon', $employee->salaries?->echelon) }}"
+                                       readonly>
                             </div>
+
+                            <script>
+                                const categoryEditSelect = document.getElementById('categoryEditSelect');
+                                const echelonEditInput   = document.getElementById('echelonEditInput');
+
+                                const categoryToEchelon = {
+                                    'A1': 'I',
+                                    'A2': 'II',
+                                    'A3': 'III',
+                                    'B1': 'IV',
+                                    'B2': 'V',
+                                    'B3': 'VI',
+                                    'B4': 'VII',
+                                    'B5': 'VIII',
+                                    'C1': 'IX',
+                                    'C2': 'X',
+                                    'C3': 'XI',
+                                    'C4': 'XII',
+                                    'C5': 'XIII',
+                                    'D1': 'XIV',
+                                    'D2': 'XV',
+                                    'D3': 'XVI',
+                                    'D4': 'XVII',
+                                    'D5': 'XVIII',
+                                    'E1': 'XIX',
+                                    'E2': 'XX',
+                                    'E3': 'XXI'
+                                };
+
+                                function updateEchelonEdit() {
+                                    const category = categoryEditSelect.value;
+                                    echelonEditInput.value = categoryToEchelon[category] || '';
+                                }
+
+
+                                categoryEditSelect.addEventListener('change', updateEchelonEdit);
+
+
+                                document.addEventListener('DOMContentLoaded', updateEchelonEdit);
+                            </script>
 
                             {{-- Currency --}}
                             <div class="col-md-3">
