@@ -636,7 +636,6 @@
                                 <label class="form-label fw-bold">{{ __('Echelon') }}</label>
                                 <input type="text" id="echelonSelect" name="salary_echelon" class="form-control" style="border-radius:0; color:#ff6600;" readonly>
                             </div>
-
                             <script>
                                 const categorySelect = document.getElementById('categorySelect');
                                 const echelonInput = document.getElementById('echelonSelect');

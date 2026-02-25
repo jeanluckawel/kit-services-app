@@ -301,6 +301,8 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/quick-pay/list-ajax', [QuickPayController::class, 'listAjax'])
         ->name('quick_pay.list.ajax');
 
+    Route::get('/quick-pay/{id}', [QuickPayController::class, 'show'])->name('quick_pay.show');
+
 
 
 

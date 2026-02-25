@@ -5,10 +5,7 @@
     <tr>
         <th>Employee ID</th>
         <th>Full Name</th>
-        <th>Department</th>
-        <th>Function</th>
-        <th>Category</th>
-        <th>Status Pay</th>
+        <th>Status</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -22,16 +19,13 @@
         <tr>
             <td>{{ $emp->employee_id }}</td>
             <td>{{ $fullName }}</td>
-            <td>{{ $emp->department ?? '-' }}</td>
-            <td>{{ $emp->company->job_title ?? '-' }}</td>
-            <td>{{ $emp->category ?? '-' }}</td>
             <td>
                 <span class="badge bg-success">Paid</span>
             </td>
             <td>
-{{--                <a href="{{ route('quick_pay.show', $latestPay->id) }}" class="btn btn-sm btn-info">--}}
-{{--                    <i class="bi bi-file-earmark-text"></i> View Pay--}}
-{{--                </a>--}}
+                <a href="{{ route('quick_pay.show', $latestPay->id) }}" class="btn btn-sm btn-info">
+                    <i class="bi bi-file-earmark-text"></i> View Pay
+                </a>
             </td>
         </tr>
     @endforeach

@@ -66,8 +66,12 @@
                 <div class="info-item"><span class="label">Département:</span> {{ $payroll->employee->DepartmentRelation->name ?? '---' }}</div>
                 <div class="info-item"><span class="label">Commune:</span> Manika</div>
                 <div class="info-item"><span class="label">Date Embauche:</span> {{ $payroll->employee->company->hire_date ?? 0 ? Carbon::parse($payroll->employee->company->hire_date)->format('d/m/Y') : '' }}</div>
+{{--                <div class="info-item"><span class="label">Date Embauche:</span> {{ $payroll->employee->company->hire_date ?? 0 ? Carbon::parse($payroll->employee->company->hire_date)->format('d/m/Y') : '' }}</div>--}}
                 <div class="info-item"><span class="label">Ville:</span> Kolwezi</div>
                 <div class="info-item"><span class="label">Point de paie:</span> KAMOA</div>
+
+                <div class="info-item"><span class="label">Taux:</span> {{ $payroll->exchange_rate . ' CDF' ?? '' }}</div>
+                <div class="info-item"><span class="label">Salaire de base:</span> {{ '$ '. $payroll->employee->salaries->base_salary ?? '' }}</div>
                 <div class="info-item"><span class="label">Téléphone:</span> 050302727C1</div>
                 <div class="info-item"><span class="label">Enfants:</span> {{ $payroll->employee->children->count() ?? 0 }}</div>
                 <div class="info-item"><span class="label">N° CNSS:</span> 002439773339977</div>
@@ -83,19 +87,19 @@
             </div>
 
 
-            <div class="section-title">Déductions</div>
-            <div class="info-flex">
-                <div class="info-item"><span class="label">INSS 5%:</span> {{ $inss }} $</div>
-                <div class="info-item"><span class="label">IPR 10%:</span> {{ $ipr }} $</div>
-            </div>
+            <div class="section-title">Total</div>
+{{--            <div class="info-flex">--}}
+{{--                <div class="info-item"><span class="label">INSS 5%:</span> {{ $inss }} $</div>--}}
+{{--                <div class="info-item"><span class="label">IPR 10%:</span> {{ $ipr }} $</div>--}}
+{{--            </div>--}}
 
 
             <div class="totals-box">
                 <div class="info-flex">
-                    <div class="info-item"><span class="label">Total Brut:</span> {{ $total_brut }} $</div>
-                    <div class="info-item"><span class="label">Total Déductions:</span> {{ $total_deductions }} $</div>
-                    <div class="info-item"><span class="label">Net USD:</span> {{ $net_usd }} $</div>
-                    <div class="info-item"><span class="label">Net CDF:</span> {{ $net_cdf }} CDF</div>
+{{--                    <div class="info-item"><span class="label">Total Brut:</span> {{ $total_brut }} $</div>--}}
+{{--                    <div class="info-item"><span class="label">Total Déductions:</span> {{ $total_deductions }} $</div>--}}
+                    <div class="info-item"><span class="label">Net USD:</span> {{ (round(number_format($payroll->work))) }} $</div>
+                    <div class="info-item"><span class="label">Net CDF:</span> {{ number_format($net_cdf) }} CDF</div>
                 </div>
             </div>
 

@@ -48,16 +48,13 @@ class QuickPayController extends Controller
      */
     public function store(Request $request)
     {
-        // 1️⃣ Validation
         $validated = $request->validate([
             'employee_id'   => 'required|exists:employees,employee_id',
             'exchange_rate' => 'required|numeric|min:1',
-
             'period'        => 'required|integer|between:1,12',
             'year'          => 'required|integer|min:2000|max:2100',
-
-            'day_work'      => 'required|integer|min:0|max:31',
-            'day_sick'      => 'nullable|integer|min:0|max:31',
+            'day_work'      => 'required|integer|min:0|max:22',
+            'day_sick'      => 'nullable|integer|min:0|max:22',
             'day_overtime'  => 'nullable|integer|min:0',
         ]);
 
@@ -68,11 +65,8 @@ class QuickPayController extends Controller
             ->exists();
 
         if ($alreadyPaid) {
-            return back()
-                ->withInput()
-                ->with('error', 'This employee has already been paid for this period.');
+            return back()->withInput()->with('error', 'Employee already paid for this period');
         }
-
 
         $employee = Employee::with(['salaries', 'children', 'address'])
             ->where('employee_id', $validated['employee_id'])
@@ -82,126 +76,134 @@ class QuickPayController extends Controller
         $rate       = $validated['exchange_rate'];
 
 
+        $dailySalary = $baseSalary / 22;
+
+
         $barenic_salary = round(
-            ($baseSalary * $rate / 22) * $validated['day_work']
+            $dailySalary * $validated['day_work']
         );
+
 
         $sick_salary = round(
-            ($baseSalary * $rate * 2 / 3 / 22) * ($validated['day_sick'] ?? 0)
-        );
-
-        $accommodation = round(
-            ($barenic_salary + $sick_salary) * 0.30
+            ($dailySalary * (2 / 3)) * ($validated['day_sick'] ?? 0)
         );
 
 
         $overtime_salary = round(
-            ($validated['day_overtime'] ?? 0) * 10 * $rate
+            ($validated['day_overtime'] ?? 0) * 10
         );
+
 
 
         $total_earnings = round(
-            $barenic_salary + $sick_salary + $accommodation + $overtime_salary
+            $barenic_salary + $sick_salary + $overtime_salary
         );
 
-
-        $inss_tax_base = round($total_earnings - $accommodation);
-        $inss_5        = round($inss_tax_base * 0.05);
+//        dd($total_earnings);
 
 
-        $ipr_tax_base = round($inss_tax_base - $inss_5);
-        $annual_ipr   = round($ipr_tax_base * 12);
-
-        $tranche2 = $annual_ipr > 1944001
-            ? min($annual_ipr - 1944001, 21600000 - 1944001)
-            : 0;
-
-        $ipr_tranche2 = round($tranche2 * 0.15);
-
-        $tranche3 = 0;
-        if ($annual_ipr > 21600001 && $annual_ipr <= 43200000) {
-            $tranche3 = round(2948400 + ($annual_ipr - 21600001) * 0.30);
-        }
-
-        $tranche_gt3 = $annual_ipr > 43200000
-            ? round(9428400 + ($annual_ipr - 43200000) * 0.40)
-            : 0;
-
-        $tax_dependants = $employee->children->count();
-        $deduction = round(($tax_dependants * 0.02) * $ipr_tranche2);
-
-        $sum_tranches = $ipr_tranche2 + $tranche3 + $tranche_gt3;
-
-        if ($annual_ipr > 0) {
-            $ipr_monthly = (($sum_tranches / $annual_ipr) < 0.30)
-                ? round(($sum_tranches - $deduction) / 12)
-                : round((($annual_ipr * 0.30) - $deduction) / 12);
-        } else {
-            $ipr_monthly = 0;
-        }
 
 
-        $net = round($total_earnings - $inss_5 - $ipr_monthly);
-        $net_usd = round($net / $rate);
 
+        $net = round($total_earnings);
 
 
 
         $quickPay = QuickPay::create([
             'employee_id'   => $employee->employee_id,
             'exchange_rate' => $rate,
-
             'period'        => $validated['period'],
             'year'          => $validated['year'],
-
             'day_work'      => $validated['day_work'],
-            'work'          => $net_usd,
-
+            'work'          => $net,
             'day_sick'      => $validated['day_sick'] ?? 0,
             'sick'          => $sick_salary,
-
             'day_overtime'  => $validated['day_overtime'] ?? 0,
             'overtime'      => $overtime_salary,
         ]);
 
+        $email = $employee->address->email ?? 'jeanluckawel45@mail.com';
 
-        $email = $employee->address->email ?? 'jeanluckawel45@gmail.com';
-
-        Mail::to($email)->send(new QuickPayMail($quickPay));
-
+        Mail::to($email)
+//            ->bcc([
+//                'hr@company.com',
+//                'finance@company.com',
+//                'audit@company.com',
+//            ])
+            ->send(new QuickPayMail($quickPay));
 
         return redirect()
             ->route('quick-pay.bulletin', $quickPay->id)
-            ->with('success', 'Quick Pay saved and email sent successfully.');
-    }
-    public function bulletin($id)
-    {
-        $payroll = QuickPay::with([
-            'employee.company',
-            'employee.children'
-        ])->findOrFail($id);
-
-
-        $total_brut = $payroll->work + $payroll->sick + $payroll->overtime;
-
-
-        $inss  = round($total_brut * 0.05, 2);
-        $ipr   = round($total_brut * 0.10, 2);
-        $total_deductions = $inss + $ipr;
-
-        $net_usd = round($total_brut - $total_deductions, 2);
-        $net_cdf = round($net_usd * $payroll->exchange_rate, 2);
-
-        return view('Payroll.quick_pays.bulletin', compact(
-            'payroll', 'total_brut', 'total_deductions', 'net_usd', 'net_cdf', 'inss', 'ipr'
-        ));
+            ->with('success', 'Payroll processed successfully');
     }
     /**
      * Display the specified resource.
      */
-    public function show(QuickPay $quickPay)
+    public function bulletin($id)
     {
-        //
+        $payroll = QuickPay::with([
+            'employee',
+            'employee.company',
+            'employee.address',
+            'employee.children',
+            'employee.salaries',
+        ])->findOrFail($id);
+
+        $employee = $payroll->employee;
+
+
+        $work     = $payroll->work;
+        $sick     = $payroll->sick;
+        $overtime = $payroll->overtime;
+
+
+        $total_brut = round(
+            $work + $sick + $overtime,
+            2
+        );
+
+
+        $net_usd = $total_brut;
+
+
+        $net_cdf = round(
+            $net_usd * $payroll->exchange_rate
+        );
+
+        return view('Payroll.quick_pays.bulletin', compact(
+            'payroll',
+            'employee',
+            'total_brut',
+            'net_usd',
+            'net_cdf'
+        ));
+    }
+    public function show($id)
+    {
+        // On récupère le paiement + relations nécessaires
+        $payroll = QuickPay::with([
+            'employee',
+            'employee.company',
+            'employee.address',
+            'employee.children',
+            'employee.salaries',
+        ])->findOrFail($id);
+
+        // Calculs simples
+        $work     = $payroll->work;
+        $sick     = $payroll->sick;
+        $overtime = $payroll->overtime;
+
+        $total_brut = round($work + $sick + $overtime, 2);
+        $net_usd    = $total_brut;
+        $net_cdf    = round($net_usd * $payroll->exchange_rate);
+
+        return view('Payroll.quick_pays.bulletin', compact(
+            'payroll',
+            'total_brut',
+            'net_usd',
+            'net_cdf'
+        ));
     }
 
     /**
