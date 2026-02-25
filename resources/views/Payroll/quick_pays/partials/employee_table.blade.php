@@ -38,9 +38,6 @@
         <tr>
             <td>{{ $emp->employee_id }}</td>
             <td>{{ $fullName }}</td>
-            <td>{{ $emp->department ?? '-' }}</td>
-            <td>{{ $emp->company->job_title ?? '-' }}</td>
-            <td>{{ $emp->category ?? '-' }}</td>
             <td>
                 <span class="badge bg-secondary">Pending</span>
             </td>

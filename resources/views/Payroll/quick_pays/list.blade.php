@@ -23,7 +23,7 @@
             <div class="card-tools ms-3">
                 @can('employee_create')
                     <a href="{{ route('quick_pay') }}" class="btn btn-light text-orange">
-                        <i class="bi bi-plus-lg"></i> New Quick Pay
+                        <i class="bi bi-plus-lg"></i> New  Pay
                     </a>
                 @endcan
             </div>

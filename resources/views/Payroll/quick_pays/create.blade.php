@@ -25,7 +25,7 @@
             <div class="card-header d-flex align-items-center"
                  style="background-color:#FF6600;color:#fff;border-radius:0;">
                 <h3 class="mb-0">
-                    <i class="bi bi-cash-stack me-2"></i> Quick Pay
+                    <i class="bi bi-cash-stack me-2"></i>  Payroll
                 </h3>
             </div>
 
