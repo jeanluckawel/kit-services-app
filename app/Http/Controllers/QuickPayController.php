@@ -180,7 +180,7 @@ class QuickPayController extends Controller
     }
     public function show($id)
     {
-        // On récupère le paiement + relations nécessaires
+
         $payroll = QuickPay::with([
             'employee',
             'employee.company',
@@ -258,6 +258,7 @@ class QuickPayController extends Controller
         $filterYear = $request->get('year', now()->year);
 
         $employees = Employee::query()
+            ->where('status',1)
             ->when($search, function ($q, $search) {
                 $q->where('employee_id', 'like', "%$search%")
                     ->orWhereRaw("first_name || ' ' || last_name || ' ' || middle_name LIKE ?", ["%$search%"]);
