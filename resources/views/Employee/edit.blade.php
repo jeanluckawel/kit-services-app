@@ -296,7 +296,7 @@
                                     <option value="">Select Department</option>
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}"
-                                            {{ old('department', $employee->company->departmentRelation->name) == $department->name ? 'selected' : '' }}>
+                                            {{ old('department', $employee->company?->departmentRelation->name) == $department->name ? 'selected' : '' }}>
                                             {{ $department->name }}
                                         </option>
                                     @endforeach
@@ -310,7 +310,7 @@
                                     <option value="">Select Section</option>
                                     @foreach($sections as $section)
                                         <option value="{{ $section->id }}"
-                                            {{ old('section', $employee->company?->section_id) == $section->id ? 'selected' : '' }}>
+                                            {{ old('section',$employee->company?->sectionRelation->name) == $section->id ? 'selected' : '' }}>
                                             {{ $section->name }}
                                         </option>
                                     @endforeach
@@ -324,7 +324,7 @@
                                     <option value="">Select Job Title</option>
                                     @foreach($jobTitles as $job)
                                         <option value="{{ $job->id }}"
-                                            {{ old('job_title', $employee->company?->job_title_id) == $job->id ? 'selected' : '' }}>
+                                            {{ old('job_title', $employee->company?->jobTitleRelation->name) == $job->id ? 'selected' : '' }}>
                                             {{ $job->name }}
                                         </option>
                                     @endforeach
