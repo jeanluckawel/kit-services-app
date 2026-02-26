@@ -296,7 +296,7 @@
                                     <option value="">Select Department</option>
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}"
-                                            {{ old('department', $employee->company?->department_id) == $department->id ? 'selected' : '' }}>
+                                            {{ old('department', $employee->company->departmentRelation->name) == $department->name ? 'selected' : '' }}>
                                             {{ $department->name }}
                                         </option>
                                     @endforeach
@@ -935,7 +935,7 @@
                 }
             }
 
-            // Pré-charger sections et job titles si déjà sélectionné
+
             let currentDepartment = $('#department').val();
             let currentSection = "{{ old('section', $employee->company?->section_id) }}";
             let currentJob = "{{ old('job_title', $employee->company?->job_title_id) }}";
