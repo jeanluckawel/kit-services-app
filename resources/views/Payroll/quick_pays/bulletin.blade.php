@@ -72,9 +72,9 @@
 
                 <div class="info-item"><span class="label">Taux:</span> {{ $payroll->exchange_rate . ' CDF' ?? '' }}</div>
                 <div class="info-item"><span class="label">Salaire de base:</span> {{ '$ '. $payroll->employee->salaries->base_salary ?? '' }}</div>
-                <div class="info-item"><span class="label">Téléphone:</span> 050302727C1</div>
+                <div class="info-item"><span class="label">N° CNSS:</span> 050302727C1</div>
                 <div class="info-item"><span class="label">Enfants:</span> {{ $payroll->employee->children->count() ?? 0 }}</div>
-                <div class="info-item"><span class="label">N° CNSS:</span> 002439773339977</div>
+                <div class="info-item"><span class="label">Téléphone:</span> 002439773339977</div>
             </div>
 
 

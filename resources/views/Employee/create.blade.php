@@ -1054,20 +1054,17 @@
 
 
 
-        const form = document.querySelector('form'); // cible ton formulaire
-        const saveBtn = document.getElementById('saveBtn');
-        const btnText = document.getElementById('btnText');
-        const btnSpinner = document.getElementById('btnSpinner');
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const btn = document.getElementById('saveBtn');
+            const spinner = document.getElementById('btnSpinner');
+            const text = document.getElementById('btnText');
 
-        form.addEventListener('submit', function(e) {
-            // Empêche le double clic
-            saveBtn.disabled = true;
-
-            // Affiche le spinner
-            btnSpinner.classList.remove('d-none');
-
-            // Optionnel : change le texte du bouton
-            btnText.textContent = 'Saving...';
+            form.addEventListener('submit', function () {
+                btn.disabled = true;
+                spinner.classList.remove('d-none');
+                text.textContent = 'Saving...';
+            });
         });
     </script>
 
