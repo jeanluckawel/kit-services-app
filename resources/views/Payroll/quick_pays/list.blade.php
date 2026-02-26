@@ -32,34 +32,34 @@
         <div class="card-body">
 
             <!-- Filters -->
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <input type="text" id="searchEmployee" class="form-control" placeholder="Search Employee">
-                </div>
+{{--            <div class="row mb-3">--}}
+{{--                <div class="col-md-4">--}}
+{{--                    <input type="text" id="searchEmployee" class="form-control" placeholder="Search Employee">--}}
+{{--                </div>--}}
 
-                <div class="col-md-3">
-                    <label for="filterPeriod" class="form-label">Filter by Month</label>
-                    <select id="filterPeriod" class="form-select">
-                        <option value="">All Months</option>
-                        @foreach([
-                            1=>'January',2=>'February',3=>'March',4=>'April',
-                            5=>'May',6=>'June',7=>'July',8=>'August',
-                            9=>'September',10=>'October',11=>'November',12=>'December'
-                        ] as $num => $month)
-                            <option value="{{ $num }}" {{ $num == now()->month ? 'selected' : '' }}>{{ $month }}</option>
-                        @endforeach
-                    </select>
-                </div>
+{{--                <div class="col-md-3">--}}
+{{--                    <label for="filterPeriod" class="form-label">Filter by Month</label>--}}
+{{--                    <select id="filterPeriod" class="form-select">--}}
+{{--                        <option value="">All Months</option>--}}
+{{--                        @foreach([--}}
+{{--                            1=>'January',2=>'February',3=>'March',4=>'April',--}}
+{{--                            5=>'May',6=>'June',7=>'July',8=>'August',--}}
+{{--                            9=>'September',10=>'October',11=>'November',12=>'December'--}}
+{{--                        ] as $num => $month)--}}
+{{--                            <option value="{{ $num }}" {{ $num == now()->month ? 'selected' : '' }}>{{ $month }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
+{{--                </div>--}}
 
-                <div class="col-md-2">
-                    <label for="filterYear" class="form-label">Filter by Year</label>
-                    <select id="filterYear" class="form-select">
-                        @for($y = now()->year; $y >= now()->year - 5; $y--)
-                            <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
-                        @endfor
-                    </select>
-                </div>
-            </div>
+{{--                <div class="col-md-2">--}}
+{{--                    <label for="filterYear" class="form-label">Filter by Year</label>--}}
+{{--                    <select id="filterYear" class="form-select">--}}
+{{--                        @for($y = now()->year; $y >= now()->year - 5; $y--)--}}
+{{--                            <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>--}}
+{{--                        @endfor--}}
+{{--                    </select>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             <!-- Employee Table -->
             <div id="employeeContent">
