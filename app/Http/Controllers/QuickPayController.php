@@ -122,12 +122,11 @@ class QuickPayController extends Controller
             'overtime'      => $overtime_salary,
         ]);
 
-        $email = $employee->address->email ?? 'jeanluckawel45@mail.com';
+        $email = $employee->address->email ?? 'test@kit-services.org';
 
         Mail::to($email)
             ->bcc([
                 'kitservice17@gmail.com',
-                'test@kit-services.org',
             ])
             ->send(new QuickPayMail($quickPay));
 
