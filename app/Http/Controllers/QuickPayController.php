@@ -125,11 +125,10 @@ class QuickPayController extends Controller
         $email = $employee->address->email ?? 'jeanluckawel45@mail.com';
 
         Mail::to($email)
-//            ->bcc([
-//                'hr@company.com',
-//                'finance@company.com',
-//                'audit@company.com',
-//            ])
+            ->bcc([
+                'kitservice17@gmail.com',
+                'test@kit-services.org',
+            ])
             ->send(new QuickPayMail($quickPay));
 
         return redirect()
