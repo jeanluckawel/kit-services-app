@@ -61,9 +61,9 @@
                 <div class="info-item"><span class="label">Raison sociale:</span> Kit Service SARL</div>
                 <div class="info-item"><span class="label">Nom:</span> {{ $payroll->employee->first_name ?? '' }} {{ $payroll->employee->middle_name ?? '' }} {{ $payroll->employee->last_name ?? '' }}</div>
                 <div class="info-item"><span class="label">Adresse:</span> N°1627 B Av. Kamina</div>
-                <div class="info-item"><span class="label">Fonction:</span> {{ $employee?->jobTitleRelation?->name ?? '---' }}</div>
+                <div class="info-item"><span class="label">Fonction:</span> {{ $employee->company->departmentRelation->name ?? '' }}</div>
                 <div class="info-item"><span class="label">Quartier:</span> Mutoshi</div>
-                <div class="info-item"><span class="label">Département:</span> {{ $employee->DepartmentRelation->name ?? '---' }}</div>
+                <div class="info-item"><span class="label">Département:</span> {{ $employee->company->jobTitleRelation->name ?? '' }}</div>
                 <div class="info-item"><span class="label">Commune:</span> Manika</div>
                 <div class="info-item"><span class="label">Date Embauche:</span> {{ $payroll->employee->company->hire_date ?? 0 ? Carbon::parse($payroll->employee->company->hire_date)->format('d/m/Y') : '' }}</div>
 {{--                <div class="info-item"><span class="label">Date Embauche:</span> {{ $payroll->employee->company->hire_date ?? 0 ? Carbon::parse($payroll->employee->company->hire_date)->format('d/m/Y') : '' }}</div>--}}
