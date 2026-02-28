@@ -1,6 +1,5 @@
 <?php
 
-use App\Exports\ChildrenExport;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
@@ -15,8 +14,9 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PerceptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickPayController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Models\Employee\ChildrenExport;
 use Illuminate\Support\Facades\Route;
 
 

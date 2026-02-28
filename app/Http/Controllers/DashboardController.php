@@ -30,8 +30,8 @@ class  DashboardController extends Controller
             ->where('is_read', false)
             ->count();
 
-//        $employees = Employee::where('status', 1)->get();
-//        $employeeCount = Employee::where('status', 1)->count();
+        $employees = Employee::where('status', 1)->get();
+        $employeeCount = Employee::where('status', 1)->count();
 
         $user = User::count();
 
@@ -49,8 +49,8 @@ class  DashboardController extends Controller
         $balanceCDF = $perceptionCDF - $expenseCDF;
 
         return view('dashboard.dashboard', compact(
-//            'employees',
-//            'employeeCount',
+            'employees',
+            'employeeCount',
             'user',
             'balanceUSD',
             'balanceCDF',
