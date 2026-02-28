@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\ChildrenExport;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
@@ -302,6 +303,11 @@ Route::middleware(['auth','verified'])->group(function () {
         ->name('quick_pay.list.ajax');
 
     Route::get('/quick-pay/{id}', [QuickPayController::class, 'show'])->name('quick_pay.show');
+
+
+    Route::get('/children/export', function () {
+        return Excel::download(new ChildrenExport, 'children_kit_service.xlsx');
+    })->name('children.export');
 
 
 

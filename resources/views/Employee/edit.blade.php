@@ -309,8 +309,8 @@
                                 <select id="section" name="section" class="form-select" style="border-radius:0;">
                                     <option value="">Select Section</option>
                                     @foreach($sections as $section)
-                                        <option value="{{ $section->id }}"
-                                            {{ old('section',$employee->company?->sectionRelation->name) == $section->id ? 'selected' : '' }}>
+                                        <option value="{{ $section->id }}">
+{{--                                            {{ old('section',$employee->company->name) == $section->id ? 'selected' : '' }}>--}}
                                             {{ $section->name }}
                                         </option>
                                     @endforeach
@@ -323,8 +323,8 @@
                                 <select id="job_title" name="job_title" class="form-select" style="border-radius:0;">
                                     <option value="">Select Job Title</option>
                                     @foreach($jobTitles as $job)
-                                        <option value="{{ $job->id }}"
-                                            {{ old('job_title', $employee->company?->jobTitleRelation->name) == $job->id ? 'selected' : '' }}>
+                                        <option value="{{ $job->id }}">
+{{--                                            {{ old('job_title', $employee->company?->jobTitleRelation->name) == $job->id ? 'selected' : '' }}>--}}
                                             {{ $job->name }}
                                         </option>
                                     @endforeach
