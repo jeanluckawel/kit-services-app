@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\ChildrenExport;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
@@ -16,7 +17,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickPayController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Models\Employee\ChildrenExport;
 use Illuminate\Support\Facades\Route;
 
 
@@ -88,6 +88,9 @@ Route::middleware(['auth','verified'])->group(function () {
         ->name('employee.certificat')->middleware('can:employee_certificate');
     Route::get('/employees/file', [EmployeeController::class, 'file'])
         ->name('employee.file')/*->middleware('can:employee_certificate')*/;
+
+    Route::get('/employees/dependant', [EmployeeController::class, 'dependant'])
+        ->name('employees.dependant')/*->middleware('can:employee_certificate')*/;
 });
 
 // Customers
@@ -305,9 +308,11 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/quick-pay/{id}', [QuickPayController::class, 'show'])->name('quick_pay.show');
 
 
-    Route::get('/children/export', function () {
-        return Excel::download(new ChildrenExport, 'children_kit_service.xlsx');
-    })->name('children.export');
+
+        Route::get('/children/export', function () {
+            return Excel::download(new ChildrenExport, 'children_kit_service.xlsx');
+        })->name('children.export');
+
 
 
 

@@ -1112,6 +1112,10 @@ class EmployeeController extends Controller
     {
         return view('Employee.file');
     }
+    public function dependant()
+    {
+        return view('Employee.dependant');
+    }
 
 
 }

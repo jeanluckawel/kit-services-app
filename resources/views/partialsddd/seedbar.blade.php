@@ -81,6 +81,12 @@
                         </a>
                     </li>
                 @endcan
+                    <li class="nav-item">
+                        <a href="{{ route('employees.dependant') }}" class="nav-link">
+                            <i class="nav-icon bi bi-people-fill text-success"></i>
+                            <p>Dependant</p>
+                        </a>
+                    </li>
             @endcanany
 
                 <li class="nav-header">Payroll</li>
