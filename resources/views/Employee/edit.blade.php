@@ -326,6 +326,7 @@
                                         <option value="{{ $job->id }}">
 {{--                                            {{ old('job_title', $employee->company?->jobTitleRelation->name) == $job->id ? 'selected' : '' }}>--}}
                                             {{ $job->name }}
+
                                         </option>
                                     @endforeach
                                 </select>
