@@ -295,7 +295,7 @@
                                 <select id="department" name="department" class="form-select" style="border-radius:0;">
                                     <option value="">Select Department</option>
                                     @foreach($departments as $department)
-                                        <option value="{{ $department->id }}"
+                                        <option value="{{ $department->name }}"
                                             {{ old('department', $employee->company?->departmentRelation->name) == $department->name ? 'selected' : '' }}>
                                             {{ $department->name }}
                                         </option>
