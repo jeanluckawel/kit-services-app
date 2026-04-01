@@ -33,6 +33,7 @@ class Company extends Model
 
     public function departmentRelation()
     {
+
         return $this->belongsTo(Department::class, 'department', 'id')
             ->withTrashed();
     }
