@@ -290,18 +290,18 @@
                         <div class="row g-3">
 
                             {{-- Department --}}
-{{--                            <div class="col-md-6">--}}
-{{--                                <label class="form-label fw-bold">Department</label>--}}
-{{--                                <select id="department" name="department" class="form-select" style="border-radius:0;">--}}
-{{--                                    <option value="">Select Department</option>--}}
-{{--                                    @foreach($departments as $department)--}}
-{{--                                        <option value="{{ $department->name }}"--}}
-{{--                                            {{ old('department', $employee->company?->departmentRelation->name) == $department->name ? 'selected' : '' }}>--}}
-{{--                                            {{ $department->name }}--}}
-{{--                                        </option>--}}
-{{--                                    @endforeach--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Department</label>
+                                <select id="department" name="department" class="form-select" style="border-radius:0;">
+                                    <option value="">Select Department</option>
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department', $employee->company?->departmentRelation->name) == $department->name ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             {{-- Section --}}
                             <div class="col-md-6">
@@ -326,7 +326,6 @@
                                         <option value="{{ $job->id }}">
 {{--                                            {{ old('job_title', $employee->company?->jobTitleRelation->name) == $job->id ? 'selected' : '' }}>--}}
                                             {{ $job->name }}
-
                                         </option>
                                     @endforeach
                                 </select>
